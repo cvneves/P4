@@ -30,7 +30,10 @@ void *StackTop(Stack *s)
 void *StackPop(Stack *s)
 {
     if (s->top == -1)
+    {
+        printf("Stack is empty\n");
         exit(0);
+    }
 
     return (char *)s->data + s->top-- * s->element_size;
 }
