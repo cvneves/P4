@@ -5,54 +5,61 @@
 #include "Exercise.h"
 #include "List.h"
 #include "Deque.h"
+#include "NinjaList.h"
 
 int main()
 {
-    Deque *deque = (Deque *)malloc(sizeof(Deque));
-    DequeInitialize(deque);
+    NNode *head = (NNode *)malloc(sizeof(NNode));
+    head->value = 5;
+    head->np = NULL;
 
-    DequePushRight(deque, 'A');
-    DequePushRight(deque, 'B');
-    DequePushRight(deque, 'C');
+    
 
-    printf("%d\n\n", deque->left);
+    // Deque *deque = (Deque *)malloc(sizeof(Deque));
+    // DequeInitialize(deque);
 
-    printf("%c\n", DequePopRight(deque));
-    printf("%c\n", DequePopRight(deque));
-    printf("%c\n", DequePopRight(deque));
+    // DequePushRight(deque, 'A');
+    // DequePushRight(deque, 'B');
+    // DequePushRight(deque, 'C');
 
-    // List *list = (List *)malloc(sizeof(List));
-    // ListInitialize(list);
+    // printf("%d\n\n", deque->left);
 
-    // for (int i = 0; i < 10; i++)
-    // {
-    //     int *x = malloc(sizeof(int));
-    //     *x = 10 * i;
-    //     ListAppend(list, x);
-    // }
+    // printf("%c\n", DequePopRight(deque));
+    // printf("%c\n", DequePopRight(deque));
+    // printf("%c\n", DequePopRight(deque));
 
-    // for (int i = 0; i < 10; i++)
-    // {
-    //     int *x = malloc(sizeof(int));
-    //     *x = -10 * i;
-    //     ListPrepend(list, (void *)x);
-    // }
+    // // List *list = (List *)malloc(sizeof(List));
+    // // ListInitialize(list);
 
-    // int *a = (int*)malloc(sizeof(int));
-    // *a = 1000;
-    // // ListInsertAfter(list, list->tail->prev, (void *) a);
-    // ListRemove(list, list->tail);
+    // // for (int i = 0; i < 10; i++)
+    // // {
+    // //     int *x = malloc(sizeof(int));
+    // //     *x = 10 * i;
+    // //     ListAppend(list, x);
+    // // }
 
-    // {
-    //     Node *p = list->head;
+    // // for (int i = 0; i < 10; i++)
+    // // {
+    // //     int *x = malloc(sizeof(int));
+    // //     *x = -10 * i;
+    // //     ListPrepend(list, (void *)x);
+    // // }
 
-    //     do
-    //     {
-    //         printf("%d ", *((int *)p->data));
-    //     } while (p = p->next);
+    // // int *a = (int*)malloc(sizeof(int));
+    // // *a = 1000;
+    // // // ListInsertAfter(list, list->tail->prev, (void *) a);
+    // // ListRemove(list, list->tail);
 
-    //     printf("\n");
-    // }
+    // // {
+    // //     Node *p = list->head;
 
-    // ListDestroy(list);
+    // //     do
+    // //     {
+    // //         printf("%d ", *((int *)p->data));
+    // //     } while (p = p->next);
+
+    // //     printf("\n");
+    // // }
+
+    // // ListDestroy(list);
 }
