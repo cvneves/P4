@@ -4,41 +4,55 @@
 #include "Stack.h"
 #include "Exercise.h"
 #include "List.h"
+#include "Deque.h"
 
 int main()
 {
-    List *list = (List *)malloc(sizeof(List));
-    ListInitialize(list);
+    Deque *deque = (Deque *)malloc(sizeof(Deque));
+    DequeInitialize(deque);
 
-    for (int i = 0; i < 10; i++)
-    {
-        int *x = malloc(sizeof(int));
-        *x = 10 * i;
-        ListAppend(list, x);
-    }
+    DequePushRight(deque, 'A');
+    DequePushRight(deque, 'B');
+    DequePushRight(deque, 'C');
 
-    for (int i = 0; i < 10; i++)
-    {
-        int *x = malloc(sizeof(int));
-        *x = -10 * i;
-        ListPrepend(list, (void *)x);
-    }
+    printf("%d\n\n", deque->left);
 
-    int *a = (int*)malloc(sizeof(int));
-    *a = 1000;
-    // ListInsertAfter(list, list->tail->prev, (void *) a);
-    ListRemove(list, list->tail);
+    printf("%c\n", DequePopRight(deque));
+    printf("%c\n", DequePopRight(deque));
+    printf("%c\n", DequePopRight(deque));
 
-    {
-        Node *p = list->head;
+    // List *list = (List *)malloc(sizeof(List));
+    // ListInitialize(list);
 
-        do
-        {
-            printf("%d ", *((int *)p->data));
-        } while (p = p->next);
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     int *x = malloc(sizeof(int));
+    //     *x = 10 * i;
+    //     ListAppend(list, x);
+    // }
 
-        printf("\n");
-    }
+    // for (int i = 0; i < 10; i++)
+    // {
+    //     int *x = malloc(sizeof(int));
+    //     *x = -10 * i;
+    //     ListPrepend(list, (void *)x);
+    // }
 
-    ListDestroy(list);
+    // int *a = (int*)malloc(sizeof(int));
+    // *a = 1000;
+    // // ListInsertAfter(list, list->tail->prev, (void *) a);
+    // ListRemove(list, list->tail);
+
+    // {
+    //     Node *p = list->head;
+
+    //     do
+    //     {
+    //         printf("%d ", *((int *)p->data));
+    //     } while (p = p->next);
+
+    //     printf("\n");
+    // }
+
+    // ListDestroy(list);
 }
