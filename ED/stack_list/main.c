@@ -13,7 +13,23 @@ int main()
     head->value = 5;
     head->np = NULL;
 
-    
+    NNode *p1 = NULL, *p2 = head;
+    for (int i = 1; i <= 100; i++)
+    {
+        NNode *temp = p2;
+        p2 = NinjaListInsertAfter(p1, p2, i * 10);
+        p1 = temp;
+    }
+
+    p1 = NULL;
+    p2 = head;
+    while (p2)
+    {
+        printf("%d ", p2->value);
+        NNode *temp = p2;
+        p2 = (NNode *)((__intptr_t)p1 ^ (__intptr_t)p2->np);
+        p1 = temp;
+    }
 
     // Deque *deque = (Deque *)malloc(sizeof(Deque));
     // DequeInitialize(deque);

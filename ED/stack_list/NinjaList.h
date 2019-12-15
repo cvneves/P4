@@ -10,6 +10,6 @@ typedef struct NNode
     struct NNode *np;
 } NNode;
 
-NNode *NinjaListInsertAfter(NNode *node, int value);
+NNode *NinjaListInsertAfter(NNode *prev_node, NNode *node, int value);
 
 #endif
