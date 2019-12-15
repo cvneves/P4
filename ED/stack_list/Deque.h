@@ -10,7 +10,7 @@
 
 typedef struct Deque
 {
-    char data[MAX_DEQUE_SIZE];
+    char *data;
     int left, right;
     int size;
     int max_size;
