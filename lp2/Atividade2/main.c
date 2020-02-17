@@ -7,37 +7,13 @@
 #define THREAD_COUNT 10
 
 pthread_barrier_t minhaBarreira;
-int moda[THREAD_COUNT], frequencia[10][10] = {{0}}, soma[THREAD_COUNT], freq_geral[10];
+int moda[THREAD_COUNT], frequencia[10][10] = {{0}}, soma[THREAD_COUNT], freq_geral[10], moda_numero[10] = {0};
 double media[THREAD_COUNT];
 
 void *leArquivo(void *parametro);
 
 int main(int argc, char *argv[])
 {
-    // char file_name[100] = "teste.txt";
-    // FILE *f;
-
-    // f = fopen(file_name, "r");
-
-    // int num;
-
-    // while(fscanf(f, "%d", &num) != EOF)
-    // {
-    //     printf("%d\n", num);
-    // }
-
-    // for(int i = 0; i < 10; i++)
-    // {
-    //     for(int j = 0; j < 10; j++)
-    //     {
-    //         char letra[3];
-    //         letra[0] = 65 + i;
-    //         letra[1] = 48 + j;
-    //         letra[2] = 0;
-    //         printf("%s\n", strcat(letra, ".txt"));
-    //     }
-    // }
-
     pthread_t thrs[THREAD_COUNT];
     int ids[THREAD_COUNT];
 
@@ -56,16 +32,21 @@ int main(int argc, char *argv[])
     int soma_total = 0;
     for(int i = 0; i < THREAD_COUNT; i++)
     {
-        printf("%d %lf %d\n", soma[i], media[i], moda[i]);
-        if(freq_geral[i] > maior_freq)
-        {
-            maior_freq = freq_geral[i];
-            mais_freq = i;
-        }
+        printf("Grupo %c: Soma: %d, Media: %lf, Moda: %d\n", 97 + i, soma[i], media[i], moda[i]);
         soma_total += soma[i];
+        moda_numero[moda[i]]++;
     }
 
-    printf("%d %lf %d\n", soma_total, soma_total/1000.0, mais_freq);
+    for(int i = 0; i < 10; i++)
+    {
+        if(moda_numero[i] > maior_freq)
+        {
+            maior_freq = moda_numero[i];
+            mais_freq = i;
+        }
+    }
+
+    printf("Total: Soma: %d, Media: %lf, Moda: %d\n", soma_total, soma_total/1000.0, mais_freq);
 
     // for(int i = 0; i < THREAD_COUNT; i++)
     // {
@@ -83,7 +64,7 @@ void *leArquivo(void *parametro)
 {
     int thread_id = *(int *)parametro;
 
-    printf("%d\n", thread_id);
+    // printf("%d\n", thread_id);
 
     char nome[] = "XX.txt";
 
@@ -103,7 +84,6 @@ void *leArquivo(void *parametro)
         {
             soma[thread_id] += num;
             frequencia[thread_id][num]++;
-            freq_geral[num]++;
         }
     }
     media[thread_id] = soma[thread_id] / 100.0;
