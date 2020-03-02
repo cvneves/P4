@@ -12,31 +12,30 @@ section .data
 
 section .text
 main:
+    mov rbx, 100
+    call Func
 
-    push rbp
+   push rbp
+   mov rdi, printf_format
+   mov rsi, rax
+   mov rax, 0
+   call printf
+   pop rbp
+   mov rax, 0
 
-    mov rdi, printf_format
-    mov rax, [var_x]
-    mov rbx, [var_y]
-    add rax, rbx
-    mov rsi, rax
-    mov rax, 0
-    call printf
+   ret
 
-    pop rbp
 
-    mov rax, 0
+    
+Func:
+    cmp rbx, 1
+    jg Calc
+    mov rax, 1
     ret
 
-MeuProc:
-    push ebp
-    mov ebp, esp
-
-    sub esp, 8
-
-    mov DWORD PTR [ebp-4], 10
-    mov DWORD PTR [ebp-8], 20
-
-    mov esp, ebp
-    pop ebp
+Calc:
+    dec rbx
+    call Func
+    inc rbx
+    add rax, rbx
     ret
