@@ -6,10 +6,11 @@ section .data
     printf_format db "%d", 10, 0
     saida_format db "Mover disco %d de %d para %d", 10, 0
     msg_1 db 'Furafic fark', 10, 0
-    vector dd 1,2,3,4,5,6, -1
-    
-section .bss
+    vector dd 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, -1
+    vetor_cont dd 0
 
+section .bss
+    vetor_solucao resb 2 * 63 * 4
 
 section .text
     extern printf
@@ -22,16 +23,20 @@ main:
     push ebp
     mov ebp, esp
 
+    push 2
     push 3
-    push 2
     push 1
-    push 2
+    push 3
+    
+    xor ecx, ecx
     
     call Hanoi
 
     add esp, 16
 
-    ;call PrintVec
+    mov dword [vector + ecx], -1
+
+    call PrintVec
 
     pop ebp
     ret
@@ -84,14 +89,22 @@ Hanoi:
     cmp dword [ebp + 8], 1
     jne n_greater_than_1
    
-    push dword [ebp + 16]
-    push dword [ebp + 12]
-    push dword [ebp + 8]
-    push saida_format
-    call printf
-   
-    add esp, 16
+    ; push dword [ebp + 16]
+    ; push dword [ebp + 12]
+    ; push dword [ebp + 8]
+    ; push saida_format
+    ; call printf
+    ; add esp, 16
 
+    mov eax, [ebp + 12]
+    mov ebx, [ebp + 16]
+    mov dword [vector + ecx], eax
+    add ecx, 4
+    mov dword [vector + ecx], ebx
+    add ecx, 4
+
+   
+ 
     mov esp, ebp
     pop ebp
     ret
@@ -108,12 +121,19 @@ Hanoi:
         
         add esp, 16
 
-        push dword [ebp + 16]
-        push dword [ebp + 12]
-        push dword [ebp + 8]
-        push saida_format
-        call printf
-        add esp, 16
+        ; push dword [ebp + 16]
+        ; push dword [ebp + 12]
+        ; push dword [ebp + 8]
+        ; push saida_format
+        ; call printf
+        ; add esp, 16
+
+        mov eax, [ebp + 12]
+        mov ebx, [ebp + 16]
+        mov dword [vector + ecx], eax
+        add ecx, 4
+        mov dword [vector + ecx], ebx
+        add ecx, 4
 
         push dword [ebp + 12]
         push dword [ebp + 16]
@@ -123,9 +143,11 @@ Hanoi:
         push eax
        
         call Hanoi
-        
+
+
         add esp, 16
 
+      
 
 
 
