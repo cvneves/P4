@@ -6,11 +6,11 @@ section .data
     printf_format db "%d", 10, 0
     saida_format db "Mover disco %d de %d para %d", 10, 0
     msg_1 db 'Furafic fark', 10, 0
-    vector dd 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, -1
-    vetor_cont dd 0
+    ; vector dd 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, -1
+    ; vetor_cont dd 0
 
 section .bss
-    vetor_solucao resb 2 * 63 * 4
+    vector resb 2 * 63 * 4
 
 section .text
     extern printf
@@ -26,7 +26,7 @@ main:
     push 2
     push 3
     push 1
-    push 3
+    push 2
     
     xor ecx, ecx
     
