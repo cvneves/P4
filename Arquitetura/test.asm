@@ -26,7 +26,7 @@ main:
     push 2
     push 3
     push 1
-    push 2
+    push 3
     
     xor ecx, ecx
     
@@ -36,8 +36,27 @@ main:
 
     mov dword [vector + ecx], -1
 
-    call PrintVec
+    ; call PrintVec
+    
+    loop_push_vec:
+    cmp ecx, -4
+    je loop_print_stack
+    push dword [vector+ecx]
+    sub ecx, 4
+    jmp loop_push_vec
 
+    loop_print_stack:
+    pop eax
+    cmp eax, -1
+    je fim_do_main
+    push eax
+    push printf_format
+    call printf
+    add esp, 8
+    jmp loop_print_stack
+    
+
+    fim_do_main:
     pop ebp
     ret
 
@@ -60,7 +79,6 @@ PrintVec:
 
     mov eax, vector
     mov ecx, [eax]
-
 
     loopPrintvec:
     mov ecx, [eax]
@@ -144,16 +162,7 @@ Hanoi:
        
         call Hanoi
 
-
         add esp, 16
-
-      
-
-
-
-
-      
-
     
     mov esp, ebp
     pop ebp
