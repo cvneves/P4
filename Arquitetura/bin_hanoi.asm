@@ -6,6 +6,7 @@ section .data
     saida_format db "Mover da Torre %d para Torre %d", 10, 0
     scanf_format db "%d", 0
     nDiscos: times 4 db 0
+    indice_torres db 1,2,3
 
 section .bss
     vector resb 2 * 63 * 4
@@ -23,8 +24,11 @@ main:
 
     push -1
 
+    
+
+
     mov eax, 1
-    shl eax, 3 + (2 + 1)
+    shl eax, 2 + (2 + 1)
     sub eax, 8
 
     sub esp, eax
@@ -69,6 +73,9 @@ BinaryHanoi:
     push ebx
     push ecx
     and ebx, ecx
+    ;
+    ; dec ebx
+    ;
     xor edx, edx
     mov eax, ebx
     mov ecx, 3
@@ -90,6 +97,9 @@ BinaryHanoi:
     or ebx, ecx
     inc ebx
     xor edx, edx
+
+    ;dec ebx
+    
     mov eax, ebx
     mov ecx, 3
     div ecx
