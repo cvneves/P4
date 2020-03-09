@@ -28,7 +28,7 @@ main:
 
 
     mov eax, 1
-    shl eax, 2 + (2 + 1)
+    shl eax, 19 + (2 + 1)
     sub eax, 8
 
     sub esp, eax
