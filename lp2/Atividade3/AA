@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <time.h>
+#include <semaphore.h>
+
+sem_t mutex;
+sem_t dormir;
+
+char var_global;
+
+
+void* envia(void* p) {
+	long thread_id = (long) p;
+    	char content[22] = "ABRACADABRA SIMSALABIM";
+
+	for(int i = 0; i < 22; i++){
+		sem_wait(&mutex);
+
+		var_global = content[i];
+		printf("Sou a thread %ld e enviei o caractere %c\n", thread_id, var_global);
+
+		sem_post(&mutex);
+
+		sleep(1);
+	}
+}
+
+void* recebe(void* p) {
+	long thread_id = (long) p;
+
+	while(1) {
+		sem_wait(&mutex);
+
+		printf("Sou a thread %ld e recebi o caractere %c\n", thread_id, var_global);
+
+		sem_post(&mutex);
+
+		sleep(1);
+	}
+}
+
+
+
+int main(int argc, char **argv){
+    pthread_t t1;
+	pthread_t t2;
+
+	var_global = 0;
+
+	sem_init(&mutex, 0, 1);
+	sem_init(&dormir, 0, 0);
+
+	pthread_create(&t1, NULL,envia, (void*)1);
+    pthread_create(&t2, NULL,recebe, (void*)2);
+
+	while(1);
+
+	sem_wait(&dormir);
+
+	return 0;
+}
+

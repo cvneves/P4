@@ -4,31 +4,60 @@
 #include <unistd.h>
 
 sem_t mutex;
+sem_t dormir;
+int indice_string = 0;
+char caracter;
 
-void* thread(void* arg)
+void *threadProdutor(void *arg)
 {
-	//wait
-	sem_wait(&mutex);
-	printf("\nEntered..%d\n", (int) arg);
+	char str[] = "TORA";
 
-	//critical section
-	sleep(4);
-	
-	//signal
-	printf("\nJust Exiting...\n");
+	for (int i = 0; i <= strlen(str); i++)
+	{
+		sem_wait(&mutex);
+		caracter = str[i];
+		printf("Enviando o caracter %c\n", caracter);
+		sem_post(&mutex);
+		sleep(1);
+	}
+}
+
+void *threadConsumidor(void *arg)
+{
+	char str[100] = {0};
+
+	int i = 0;
+	while (1)
+	{
+		sem_wait(&mutex);
+
+		printf("Recebendo o caracter %c\n", caracter);
+		str[i++] = caracter;
+		if (!caracter)
+		{
+			break;
+		}
+		sem_post(&mutex);
+		sleep(1);
+	}
+
+	printf("%s\n", str);
 	sem_post(&mutex);
+	sem_post(&dormir);
+	sleep(1);
 }
 
 int main()
 {
 	sem_init(&mutex, 0, 1);
-	pthread_t t1, t2;
-	pthread_create (&t1, NULL, thread, (void*)1);
-	sleep(2);
-	pthread_create(&t2, NULL, thread, (void*) 2);
-	pthread_join(t1, NULL);
-	pthread_join(t2, NULL);
-	sem_destroy(&mutex);
-	return 0;
+	sem_init(&dormir, 0, 0);
+	pthread_t tp, tc;
+	pthread_create(&tp, NULL, threadProdutor, NULL);
+	pthread_create(&tc, NULL, threadConsumidor, NULL);
+	
+	// while (1)
+		// ;
+	sem_wait(&dormir);
 
+	return 0;
 }
