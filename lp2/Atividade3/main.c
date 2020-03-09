@@ -10,7 +10,7 @@ char caracter;
 
 void *threadProdutor(void *arg)
 {
-	char str[] = "TORA";
+	char str[] = "ABRACADABRA SIMSALABIM";
 
 	for (int i = 0; i <= strlen(str); i++)
 	{
