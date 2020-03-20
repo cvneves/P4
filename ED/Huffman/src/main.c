@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
     for (int i = 0; i < arrSize; i++)
     {
-        // printf("%d\n", (int)*((char *)PriorityQueuePop(pq, BytePQCompare)));
-        PriorityQueuePop(pq, BytePQCompare);
+        printf("%d\n", (int)*((char *)PriorityQueuePop(pq, BytePQCompare)));
+        // PriorityQueuePop(pq, BytePQCompare);
     }
 }

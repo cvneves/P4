@@ -51,27 +51,53 @@ void *PriorityQueuePop(PriorityQueue *pq, int (*f)(void *a, void *b))
     pq->data[0] = pq->data[pq->end];
     pq->end--;
 
-    int index = 0;
-    void *b = pq->data[index];
-    void *a = pq->data[2 * index + 1];
+    int parent = 0;
+    int left = 2 * parent + 1;
+    int right = 2 * parent + 2;
 
-    while ((2 * index + 1) <= pq->end && f(a, b))
+    while (1)
     {
-        void *temp = pq->data[index];
-        pq->data[index] = pq->data[2 * index + 1];
-        pq->data[2 * index + 1] = temp;
+        int index;
 
-        index = 2 * index + 1;
+        if (left <= pq->end && right <= pq->end)
+        {
+            if (f(pq->data[left], pq->data[right]))
+                index = left;
+            else
+                index = right;
+        }
+        else
+        {
+            if (left > pq->end && right > pq->end)
+                break;
+            if (left > pq->end)
+                index = right;
+            else
+                index = left;
+        }
 
-        b = pq->data[index];
-        a = pq->data[2 * index + 1];
+        if (f(pq->data[index], pq->data[parent]))
+        {
+
+            void *temp = pq->data[parent];
+            pq->data[parent] = pq->data[index];
+            pq->data[index] = temp;
+
+            parent = index;
+            left = 2 * index + 1;
+            right = 2 * index + 2;
+        }
+        else
+        {
+            break;
+        }
     }
 
-    for (int i = 0; i <= pq->end; i++)
-    {
-        printf("%d ", (int)*((char *)pq->data[i]));
-    }
-    printf("\n");
+    // for (int i = 0; i <= pq->end; i++)
+    // {
+    //     printf("%d ", (int)*((char *)pq->data[i]));
+    // }
+    // printf("\n");
 
     return x;
 }
