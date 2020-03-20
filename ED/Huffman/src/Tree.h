@@ -8,7 +8,7 @@
 
 typedef struct Node
 {
-    int data;
+    int value;
     struct Node *left, *right;
 } Node;
 
