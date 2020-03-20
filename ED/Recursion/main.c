@@ -29,13 +29,26 @@ int isPalindrome(char *str)
 {
     if (strlen(str) == 1)
         return 1;
-    
+}
+
+int *binarySearch(int *v, int size, int value)
+{
+    if (size == 0 && v[0] == value)
+        return v;
+
+    size /= 2;
+
+    if (v[size] < value)
+        v += size;
+    binarySearch(v + size + 1, size, value);
 }
 
 int main()
 {
-    int v[] = {1, 55, 3, 6, 4, 5};
+    int v[] = {1,2,3,4,5,6,7,8};
 
-    printf("%d\n", greatestNum(v, 5));
-    printf("%d\n", recursivePower(3, 4));
+    printf("%d\n", (binarySearch(v, 7, 8) - v)/sizeof(int) );
+
+    // printf("%d\n", greatestNum(v, 6));
+    // printf("%d\n", recursivePower(3, 4));
 }
