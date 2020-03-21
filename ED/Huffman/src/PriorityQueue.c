@@ -3,22 +3,41 @@
 PriorityQueue *PriorityQueueInitialize()
 {
     PriorityQueue *pq = malloc(sizeof(PriorityQueue));
-    pq->size = MAX_PQ_SIZE;
+    pq->size = 0;
     pq->end = -1;
-    pq->data = malloc(MAX_PQ_SIZE * sizeof(void *));
+    pq->data = NULL;
 }
 
 void PriorityQueueInsert(PriorityQueue *pq, void *x, int (*f)(void *a, void *b))
 {
     if (pq->end == -1)
     {
+        pq->data = malloc(sizeof(void *));
         pq->data[0] = x;
-        // memcpy((char *)pq->data, x, sizeof(void *));
+        pq->size = 1;
         pq->end++;
         return;
     }
 
-    int index = pq->end + 1;
+    pq->end++;
+
+    if (pq->end >= pq->size)
+    {
+        int newSize = 2 * pq->size;
+        void **temp = malloc(newSize * sizeof(void *));
+
+        for (int i = 0; i <= pq->end; i++)
+        {
+            temp[i] = pq->data[i];
+        }
+
+        pq->size = newSize;
+
+        free(pq->data);
+        pq->data = temp;
+    }
+
+    int index = pq->end;
     pq->data[index] = x;
 
     void *a = pq->data[index];
@@ -35,7 +54,6 @@ void PriorityQueueInsert(PriorityQueue *pq, void *x, int (*f)(void *a, void *b))
         a = pq->data[index];
         b = pq->data[(index - 1) / 2];
     }
-    pq->end++;
 
     // for (int i = 0; i <= pq->end; i++)
     // {
@@ -102,11 +120,13 @@ void *PriorityQueuePop(PriorityQueue *pq, int (*f)(void *a, void *b))
     return x;
 }
 
-void DestroyHeap(PriorityQueue *pq)
+void FreePriorityQueue(PriorityQueue *pq)
 {
+    free(pq->data);
+    free(pq);
 }
 
-int BytePQCompare(void *a, void *b)
+int NumComparePq(void *a, void *b)
 {
     int x = (int)*((char *)a);
     int y = (int)*((char *)b);

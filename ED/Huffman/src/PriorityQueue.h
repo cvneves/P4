@@ -16,10 +16,10 @@ typedef struct PriorityQueue
 PriorityQueue * PriorityQueueInitialize();
 void PriorityQueueInsert(PriorityQueue *pq, void *x, int (*f)(void *a, void *b));
 void *PriorityQueuePop(PriorityQueue *pq, int (*f)(void *a, void *b));
+void FreePriorityQueue(PriorityQueue *pq);
 
-int BytePQCompare(void*a, void*b);
+int NumComparePq(void*a, void*b);
 
-void DestroyHeap(PriorityQueue * pq);   
 
 
 #endif

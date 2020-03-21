@@ -8,53 +8,57 @@
 
 int main(int argc, char **argv)
 {
-    // Data *data = malloc(sizeof(Data));
+    Data *data = malloc(sizeof(Data));
 
-    // ReadData(data, argv[1]);
+    ReadData(data, argv[1]);
 
-    // GetByteFrequency(data);
+    GetByteFrequency(data);
 
     // MergeSortByteInfo(data->byteTable, 0, data->nBytes - 1);
 
-    // PrintByteTable(data);
+    PrintByteTable(data);
 
-    // BuildHuffmanTree(data);
+    Node *root = BuildHuffmanTree(data);
 
-    // FreeData(data);
+    // FreeHuffmanTree(root);
 
-    PriorityQueue *pq = PriorityQueueInitialize();
+    FreeData(data);
 
-    srand(time(NULL));
+    // PriorityQueue *pq = PriorityQueueInitialize();
 
-    int arrSize = 10;
-    // int arr[arrSize];
-    int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+    // srand(time(NULL));
 
-    for (int i = 0; i < arrSize; i++)
-    {
-        arr[i] = rand() % 10;
-    }
+    // int arrSize = 10;
+    // // int arr[arrSize];
+    // int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
 
-    for (int i = 0; i < arrSize; i++)
-    {
-        printf("%d ", arr[i]);
-    }
-    printf("\n");
+    // for (int i = 0; i < arrSize; i++)
+    // {
+    //     arr[i] = rand() % 10;
+    // }
 
-    for (int i = 0; i < arrSize; i++)
-    {
-        PriorityQueueInsert(pq, &arr[i], BytePQCompare);
-    }
+    // for (int i = 0; i < arrSize; i++)
+    // {
+    //     printf("%d ", arr[i]);
+    // }
+    // printf("\n");
 
-    for (int i = 0; i <= pq->end; i++)
-    {
-        printf("%d ", (int)*((char *)pq->data[i]));
-    }
-    printf("\n");
+    // for (int i = 0; i < arrSize; i++)
+    // {
+    //     PriorityQueueInsert(pq, &arr[i], BytePQCompare);
+    // }
 
-    for (int i = 0; i < arrSize; i++)
-    {
-        printf("%d\n", (int)*((char *)PriorityQueuePop(pq, BytePQCompare)));
-        // PriorityQueuePop(pq, BytePQCompare);
-    }
+    // for (int i = 0; i <= pq->end; i++)
+    // {
+    //     printf("%d ", (int)*((char *)pq->data[i]));
+    // }
+    // printf("\n");
+
+    // for (int i = 0; i < arrSize; i++)
+    // {
+    //     printf("%d\n", (int)*((char *)PriorityQueuePop(pq, BytePQCompare)));
+    //     // PriorityQueuePop(pq, BytePQCompare);
+    // }
+
+    // FreePriorityQueue(pq);
 }
