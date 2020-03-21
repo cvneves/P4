@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
     Node *root = BuildHuffmanTree(data);
 
-    // FreeHuffmanTree(root);
+    FreeHuffmanTree(root);
 
     FreeData(data);
 

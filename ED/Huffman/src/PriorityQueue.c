@@ -12,8 +12,15 @@ void PriorityQueueInsert(PriorityQueue *pq, void *x, int (*f)(void *a, void *b))
 {
     if (pq->end == -1)
     {
+        if (pq->size >= 1)
+        {
+            pq->data[0] = x;
+            return;
+        }
+
         pq->data = malloc(sizeof(void *));
         pq->data[0] = x;
+
         pq->size = 1;
         pq->end++;
         return;
@@ -26,7 +33,7 @@ void PriorityQueueInsert(PriorityQueue *pq, void *x, int (*f)(void *a, void *b))
         int newSize = 2 * pq->size;
         void **temp = malloc(newSize * sizeof(void *));
 
-        for (int i = 0; i <= pq->end; i++)
+        for (int i = 0; i < pq->end; i++)
         {
             temp[i] = pq->data[i];
         }
@@ -64,8 +71,9 @@ void PriorityQueueInsert(PriorityQueue *pq, void *x, int (*f)(void *a, void *b))
 
 void *PriorityQueuePop(PriorityQueue *pq, int (*f)(void *a, void *b))
 {
+    printf("%dAEE\n", pq->end);
     void *x = pq->data[0];
-
+    
     pq->data[0] = pq->data[pq->end];
     pq->end--;
 

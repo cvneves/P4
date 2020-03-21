@@ -13,38 +13,49 @@ Node *BuildHuffmanTree(Data *data)
         nf->node->value = data->byteTable[i]->byte;
         nf->freq = data->byteTable[i]->frequency;
         PriorityQueueInsert(pq, nf, NodeInfoCompare);
+        printf("%d\n", pq->size);
     }
 
-    for(int i = 0; i < data->nBytes;i++)
+    if (data->nBytes >= 2)
     {
-        free(pq->data[i]);
+        while (1)
+        {
+            if (pq->end >= 1)
+            {
+                NodeInfo *na = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
+                printf("%d %d\n", pq->end, pq->size);
+                NodeInfo *nb = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
+                printf("%d %d\n", pq->end, pq->size);
+
+                NodeInfo *nf = malloc(sizeof(NodeInfo));
+                nf->node = malloc(sizeof(Node));
+                nf->node->right = na->node;
+                nf->node->left = nb->node;
+                nf->node->value = -1;
+                nf->freq = na->freq + nb->freq;
+
+                root = nf->node;
+
+                PriorityQueueInsert(pq, nf, NodeInfoCompare);
+
+                free(na);
+                free(nb);
+            }
+            else if(pq->end == 0)
+            {
+                NodeInfo *na = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
+                root = na->node;
+
+                free(na);
+                break;
+            }
+            else
+            {
+                break;
+            }
+            
+        }
     }
-
-    // if (data->nBytes >= 2)
-    // {
-    //     while (pq->end > 0)
-    //     {
-    //         NodeInfo *na = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
-    //         NodeInfo *nb = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
-
-    //         NodeInfo *nf = malloc(sizeof(NodeInfo));
-    //         nf->node = malloc(sizeof(Node));
-    //         nf->node->right = na->node;
-    //         nf->node->left = nb->node;
-    //         nf->node->value = -1;
-    //         nf->freq = na->freq + nb->freq;
-
-    //         PriorityQueueInsert(pq, nf, NodeInfoCompare);
-
-    //         free(na);
-    //         free(nb);
-    //     }
-
-    //     NodeInfo *na = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
-    //     root = na->node;
-
-    //     free(na);
-    // }
 
     FreePriorityQueue(pq);
 
@@ -74,7 +85,7 @@ void FreeHuffmanTree(Node *node)
 {
     if (node == NULL)
         return;
-    
+
     FreeHuffmanTree(node->left);
     FreeHuffmanTree(node->right);
 
