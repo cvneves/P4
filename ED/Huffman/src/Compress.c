@@ -21,7 +21,7 @@ void CompressFile(char *inputFileName, char *outputFileName, Node *root)
 
     ByteCode bc[MAX_BYTES];
 
-    for(int i = 0; i < MAX_BYTES;i++)
+    for (int i = 0; i < MAX_BYTES; i++)
     {
         bc[i].code = -1;
     }
@@ -29,9 +29,9 @@ void CompressFile(char *inputFileName, char *outputFileName, Node *root)
     GenerateCodeTable(root, 0, 0, bc);
 
     printf("##########################################\n");
-    for(int i = 0; i < MAX_BYTES; i++)
+    for (int i = 0; i < MAX_BYTES; i++)
     {
-        if(bc[i].code != -1)
+        if (bc[i].code != -1)
         {
             printf("Byte: %d, Code: %d, Length: %d\n", i, bc[i].code, bc[i].length);
         }
@@ -42,12 +42,42 @@ void CompressFile(char *inputFileName, char *outputFileName, Node *root)
 
     char msg[] = "abbcccdddde";
 
-    int index = 0;
-    while(index < strlen(msg))
     {
-        printf("a\n");
-        int chunkSize = 0;
-        index++;
-    }
+        int i = 0;
+        int leftOver = 0;
 
+        while (i < strlen(msg))
+        {
+            char finalByte = 0;
+            int chunkSize = 8;
+
+            while (i < strlen(msg))
+            {
+                int codeLength = bc[msg[i]].length;
+                int code = bc[msg[i]].code;
+
+                int leftShiftLength = chunkSize - codeLength + leftOver;
+
+                if (leftShiftLength < 0)
+                {
+                    leftShiftLength *= -1;
+                    code = code >> leftShiftLength;
+                    finalByte = finalByte | code;
+                    leftOver = codeLength - leftShiftLength;
+                    break;
+                }
+
+                code = code << leftShiftLength;
+
+                // printf("%d\n", code);
+
+                finalByte = finalByte | code;
+
+                chunkSize -= codeLength;
+                i++;
+            }
+
+            printf("%hhx\n", finalByte);
+        }
+    }
 }
