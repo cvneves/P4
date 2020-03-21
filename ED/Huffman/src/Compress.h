@@ -18,6 +18,6 @@ typedef struct ByteCode
 
 void GenerateCodeTable(Node *node, int i, int length, ByteCode *bc);
 void CompressFile(FILE *fi, FILE *fo, Node *root);
-void DecompressFile(FILE *fi, FILE *fo, Node *root);
+void DecompressFile(FILE *fi, FILE *fo);
 
 #endif

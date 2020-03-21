@@ -9,29 +9,48 @@
 
 int main(int argc, char **argv)
 {
-    Data *data = malloc(sizeof(Data));
+    char *mode = argv[1];
 
-    ReadData(data, argv[1]);
+    if (strcmp(mode, "-c") == 0)
+    {
+        Data *data = malloc(sizeof(Data));
 
-    GetByteFrequency(data);
+        ReadData(data, argv[2]);
 
-    // MergeSortByteInfo(data->byteTable, 0, data->nBytes - 1);
+        GetByteFrequency(data);
 
-    PrintByteTable(data);
+        PrintByteTable(data);
 
-    Node *root = BuildHuffmanTree(data);
+        Node *root = BuildHuffmanTree(data);
 
-    FILE *fi = fopen(argv[1], "r");
-    FILE *fo = fopen(argv[2], "w");
+        FILE *fi = fopen(argv[2], "rb");
+        FILE *fo = fopen(argv[3], "wb");
 
-    CompressFile(fi, fo, root);
+        CompressFile(fi, fo, root);
 
-    FreeHuffmanTree(root);
+        FreeHuffmanTree(root);
 
-    FreeData(data);
+        FreeData(data);
 
-    fclose(fi);
-    fclose(fo);
+        fclose(fi);
+        fclose(fo);
+
+        exit(0);
+    }
+    else if (strcmp(mode, "-x") == 0)
+    {
+        FILE *fi = fopen(argv[2], "rb");
+        FILE *fo = fopen(argv[3], "wb");
+
+        DecompressFile(fi,fo);
+
+        fclose(fi);
+        fclose(fo);
+    }
+    else
+    {
+        printf("Entrada invalida\n");
+    }
 
     // char str[] = "abbcccdddde";
     // FILE *fp = fopen("instance/teste2.bin", "w");

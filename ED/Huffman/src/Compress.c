@@ -38,6 +38,8 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
     }
     printf("##########################################\n");
 
+    // SerializeTree(root, fo);
+
     /* Compressing loop */
 
     {
@@ -82,6 +84,22 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
             }
 
             printf("%hhx\n", finalByte);
+            fwrite(&msg, sizeof(char), 1, fo);
         }
+    }
+}
+
+void DecompressFile(FILE *fi, FILE *fo)
+{
+    Node *root;
+    DeSerializeTree(&root, fi);
+
+    FreeHuffmanTree(root);
+
+    char c;
+
+    while(fread(&c, sizeof(char), 1, fi) == 1)
+    {
+        printf("%hhx\n", c);
     }
 }

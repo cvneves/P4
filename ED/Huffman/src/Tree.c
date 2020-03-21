@@ -89,13 +89,16 @@ void FreeHuffmanTree(Node *node)
 
 void SerializeTree(Node *root, FILE *fp)
 {
+    int value;
     if (!root)
     {
-        fprintf(fp, "%d ", -2);
+        value = -2;
+        fwrite(&value, sizeof(int), 1, fp);
+        // fprintf(fp, "%d ", -2);
         return;
     }
 
-    fprintf(fp, "%d ", root->value);
+    fwrite(&(root->value), sizeof(int), 1, fp);
     SerializeTree(root->left, fp);
     SerializeTree(root->right, fp);
 }
@@ -103,7 +106,8 @@ void SerializeTree(Node *root, FILE *fp)
 void DeSerializeTree(Node **root, FILE *fp)
 {
     int value;
-    if (!fscanf(fp, "%d ", &value) || value == -2)
+    // if (!fscanf(fp, "%d ", &value) || value == -2)
+    if (fread(&value, sizeof(int), 1, fp) != 1 || value == -2)
     {
         *root = NULL;
         return;
