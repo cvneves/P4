@@ -1,6 +1,6 @@
 #include "Compress.h"
 
-void CompressFile(char *file_name, Node *root)
+void CompressFile(char *inputFileName, char* outputFileName, Node *root)
 {
     
 }

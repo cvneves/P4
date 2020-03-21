@@ -5,6 +5,7 @@
 #include "ByteInfo.h"
 #include "Tree.h"
 #include "PriorityQueue.h"
+#include "Compress.h"
 
 int main(int argc, char **argv)
 {
@@ -23,6 +24,8 @@ int main(int argc, char **argv)
     printf("%d\n\n", root->right->value);
 
     PrintHuffmanCodes(root, 0);
+
+    CompressFile(argv[1], argv[2], root);
 
     FreeHuffmanTree(root);
 
