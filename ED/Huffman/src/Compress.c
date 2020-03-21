@@ -40,24 +40,23 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
 
     /* Compressing loop */
 
-    bc['a'].length = 10;
-    bc['a'].code = 512;
-
-    char msg[] = "aa";
-
     {
         int i = 0;
         int leftOver = 0;
 
-        while (i < strlen(msg))
+        char msg;
+        int endOfFile;
+        endOfFile = fread(&msg, sizeof(char), 1, fi) != 1;
+
+        while (!endOfFile)
         {
             char finalByte = 0;
             int chunkSize = 8;
 
-            while (i < strlen(msg))
+            while (!endOfFile)
             {
-                int codeLength = bc[msg[i]].length;
-                int code = bc[msg[i]].code;
+                int codeLength = bc[msg].length;
+                int code = bc[msg].code;
 
                 int leftShiftLength = chunkSize - codeLength + leftOver;
 
@@ -77,6 +76,8 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
                 finalByte = finalByte | code;
 
                 chunkSize -= codeLength;
+
+                endOfFile = fread(&msg, sizeof(char), 1, fi) != 1;
                 i++;
             }
 
