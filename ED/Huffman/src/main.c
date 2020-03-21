@@ -21,51 +21,18 @@ int main(int argc, char **argv)
 
     Node *root = BuildHuffmanTree(data);
 
-    printf("%d\n\n", root->right->value);
-
-    PrintHuffmanCodes(root, 0);
-
     CompressFile(argv[1], argv[2], root);
 
     FreeHuffmanTree(root);
 
     FreeData(data);
 
-    // PriorityQueue *pq = PriorityQueueInitialize();
+    // char str[] = "abbcccdddde";
+    // FILE *fp = fopen("instance/teste2.bin", "w");
 
-    // srand(time(NULL));
-
-    // int arrSize = 10;
-    // // int arr[arrSize];
-    // int arr[] = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-
-    // for (int i = 0; i < arrSize; i++)
+    // for(int i = 0; i < strlen(str); i++)
     // {
-    //     arr[i] = rand() % 10;
+    //     fwrite(&str[i], sizeof(char), 1, fp);
     // }
-
-    // for (int i = 0; i < arrSize; i++)
-    // {
-    //     printf("%d ", arr[i]);
-    // }
-    // printf("\n");
-
-    // for (int i = 0; i < arrSize; i++)
-    // {
-    //     PriorityQueueInsert(pq, &arr[i], BytePQCompare);
-    // }
-
-    // for (int i = 0; i <= pq->end; i++)
-    // {
-    //     printf("%d ", (int)*((char *)pq->data[i]));
-    // }
-    // printf("\n");
-
-    // for (int i = 0; i < arrSize; i++)
-    // {
-    //     printf("%d\n", (int)*((char *)PriorityQueuePop(pq, BytePQCompare)));
-    //     // PriorityQueuePop(pq, BytePQCompare);
-    // }
-
-    // FreePriorityQueue(pq);
+    // fclose(fp);
 }

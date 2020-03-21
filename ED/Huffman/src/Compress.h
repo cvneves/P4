@@ -8,6 +8,15 @@
 #include "PriorityQueue.h"
 #include "Tree.h"
 
-void CompressFile(char *inputFileName, char* outputFileName, Node *root);
+#define MAX_STR_LEN 100
+
+typedef struct ByteCode
+{
+    int code;
+    int length;
+} ByteCode;
+
+void GenerateCodeTable(Node *node, int i, int length, ByteCode *bc);
+void CompressFile(char *inputFileName, char *outputFileName, Node *root);
 
 #endif

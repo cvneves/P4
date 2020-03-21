@@ -73,16 +73,6 @@ int NodeInfoCompare(void *a, void *b)
     return 0;
 }
 
-void DFS(Node *node)
-{
-    if (node == NULL)
-        return;
-
-    DFS(node->left);
-    DFS(node->right);
-
-    free(node);
-}
 
 void FreeHuffmanTree(Node *node)
 {
@@ -98,17 +88,6 @@ void FreeHuffmanTree(Node *node)
     free(node);
 }
 
-void PrintHuffmanCodes(Node *node, int num)
+void BFS(Node *root)
 {
-    if (!node)
-        return;
-
-    PrintHuffmanCodes(node->right, (num << 1) | 1);
-
-    PrintHuffmanCodes(node->left, num << 1);
-
-    if (node->value != -1)
-    {
-        printf("Symbol %d, Code %d\n", node->value, num);
-    }
 }
