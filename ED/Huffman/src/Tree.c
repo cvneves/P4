@@ -73,7 +73,6 @@ int NodeInfoCompare(void *a, void *b)
     return 0;
 }
 
-
 void FreeHuffmanTree(Node *node)
 {
     if (node == NULL)
@@ -88,6 +87,29 @@ void FreeHuffmanTree(Node *node)
     free(node);
 }
 
-void BFS(Node *root)
+void SerializeTree(Node *root, FILE *fp)
 {
+    if (!root)
+    {
+        fprintf(fp, "%d ", -2);
+        return;
+    }
+
+    fprintf(fp, "%d ", root->value);
+    SerializeTree(root->left, fp);
+    SerializeTree(root->right, fp);
+}
+
+void DeSerializeTree(Node **root, FILE *fp)
+{
+    int value;
+    if (!fscanf(fp, "%d ", &value) || value == -2)
+    {
+        *root = NULL;
+        return;
+    }
+    *root = malloc(sizeof(Node));
+    (*root)->value = value;
+    DeSerializeTree(&(*root)->left, fp);
+    DeSerializeTree(&(*root)->right, fp);
 }

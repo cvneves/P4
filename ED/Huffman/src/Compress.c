@@ -16,7 +16,7 @@ void GenerateCodeTable(Node *node, int i, int length, ByteCode *bc)
     // printf("Byte: %d, Code: %d, Length; %d\n", node->value, i, length);
 }
 
-void CompressFile(char *inputFileName, char *outputFileName, Node *root)
+void CompressFile(FILE *fi, FILE *fo, Node *root)
 {
 
     ByteCode bc[MAX_BYTES];
@@ -40,7 +40,10 @@ void CompressFile(char *inputFileName, char *outputFileName, Node *root)
 
     /* Compressing loop */
 
-    char msg[] = "abbcccdddde";
+    bc['a'].length = 10;
+    bc['a'].code = 512;
+
+    char msg[] = "aa";
 
     {
         int i = 0;

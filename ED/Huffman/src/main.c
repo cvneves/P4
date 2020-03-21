@@ -21,11 +21,17 @@ int main(int argc, char **argv)
 
     Node *root = BuildHuffmanTree(data);
 
-    CompressFile(argv[1], argv[2], root);
+    FILE *fi = fopen(argv[1], "r");
+    FILE *fo = fopen(argv[2], "w");
+
+    CompressFile(fi, fo, root);
 
     FreeHuffmanTree(root);
 
     FreeData(data);
+
+    fclose(fi);
+    fclose(fo);
 
     // char str[] = "abbcccdddde";
     // FILE *fp = fopen("instance/teste2.bin", "w");
