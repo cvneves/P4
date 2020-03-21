@@ -42,9 +42,12 @@ void CompressFile(char *inputFileName, char *outputFileName, Node *root)
 
     char msg[] = "abbcccdddde";
 
-    for(int i = 0; i < strlen(msg); i++)
+    int index = 0;
+    while(index < strlen(msg))
     {
-        int chunkSize = 8;
+        printf("a\n");
+        int chunkSize = 0;
+        index++;
     }
 
 }
