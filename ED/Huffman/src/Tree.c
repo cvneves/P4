@@ -13,7 +13,6 @@ Node *BuildHuffmanTree(Data *data)
         nf->node->value = data->byteTable[i]->byte;
         nf->freq = data->byteTable[i]->frequency;
         PriorityQueueInsert(pq, nf, NodeInfoCompare);
-        printf("%d\n", pq->size);
     }
 
     if (data->nBytes >= 2)
@@ -23,9 +22,7 @@ Node *BuildHuffmanTree(Data *data)
             if (pq->end >= 1)
             {
                 NodeInfo *na = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
-                printf("%d %d\n", pq->end, pq->size);
                 NodeInfo *nb = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
-                printf("%d %d\n", pq->end, pq->size);
 
                 NodeInfo *nf = malloc(sizeof(NodeInfo));
                 nf->node = malloc(sizeof(Node));
@@ -41,7 +38,7 @@ Node *BuildHuffmanTree(Data *data)
                 free(na);
                 free(nb);
             }
-            else if(pq->end == 0)
+            else if (pq->end == 0)
             {
                 NodeInfo *na = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
                 root = na->node;
@@ -53,7 +50,6 @@ Node *BuildHuffmanTree(Data *data)
             {
                 break;
             }
-            
         }
     }
 
@@ -87,6 +83,9 @@ void FreeHuffmanTree(Node *node)
         return;
 
     FreeHuffmanTree(node->left);
+
+    printf("%d\n", node->value);
+
     FreeHuffmanTree(node->right);
 
     free(node);
