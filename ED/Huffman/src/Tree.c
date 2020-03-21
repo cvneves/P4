@@ -24,17 +24,17 @@ Node *BuildHuffmanTree(Data *data)
                 NodeInfo *na = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
                 NodeInfo *nb = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
 
-                if (nb->node->value == -1)
-                {
-                    NodeInfo *temp = na;
-                    na = nb;
-                    nb = temp;
-                }
+                // if (nb->node->value == -1)
+                // {
+                //     NodeInfo *temp = na;
+                //     na = nb;
+                //     nb = temp;
+                // }
 
                 NodeInfo *nf = malloc(sizeof(NodeInfo));
                 nf->node = malloc(sizeof(Node));
-                nf->node->right = na->node;
-                nf->node->left = nb->node;
+                nf->node->left = na->node;
+                nf->node->right = nb->node;
                 nf->node->value = -1;
                 nf->freq = na->freq + nb->freq;
 
