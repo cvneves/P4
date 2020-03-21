@@ -23,6 +23,8 @@ Node *BuildHuffmanTree(Data *data);
 void FreeHuffmanTree(Node *node);
 int NodeInfoCompare(void *a, void *b);
 
+void PrintHuffmanCodes(Node *node, int num);
+
 void DFS(Node *node);
 
 #endif

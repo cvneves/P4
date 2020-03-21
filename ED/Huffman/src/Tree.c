@@ -24,6 +24,13 @@ Node *BuildHuffmanTree(Data *data)
                 NodeInfo *na = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
                 NodeInfo *nb = ((NodeInfo *)PriorityQueuePop(pq, NodeInfoCompare));
 
+                if (nb->node->value == -1)
+                {
+                    NodeInfo *temp = na;
+                    na = nb;
+                    nb = temp;
+                }
+
                 NodeInfo *nf = malloc(sizeof(NodeInfo));
                 nf->node = malloc(sizeof(Node));
                 nf->node->right = na->node;
@@ -84,9 +91,24 @@ void FreeHuffmanTree(Node *node)
 
     FreeHuffmanTree(node->left);
 
-    printf("%d\n", node->value);
+    // printf("%d\n", node->value);
 
     FreeHuffmanTree(node->right);
 
     free(node);
+}
+
+void PrintHuffmanCodes(Node *node, int num)
+{
+    if (!node)
+        return;
+
+    PrintHuffmanCodes(node->right, (num << 1) | 1);
+
+    PrintHuffmanCodes(node->left, num << 1);
+
+    if (node->value != -1)
+    {
+        printf("Symbol %d, Code %d\n", node->value, num);
+    }
 }

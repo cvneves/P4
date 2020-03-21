@@ -20,6 +20,10 @@ int main(int argc, char **argv)
 
     Node *root = BuildHuffmanTree(data);
 
+    printf("%d\n\n", root->right->value);
+
+    PrintHuffmanCodes(root, 0);
+
     FreeHuffmanTree(root);
 
     FreeData(data);
