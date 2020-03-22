@@ -28,15 +28,15 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
 
     GenerateCodeTable(root, 0, 0, bc);
 
-    printf("##########################################\n");
-    for (int i = 0; i < MAX_BYTES; i++)
-    {
-        if (bc[i].code != -1)
-        {
-            printf("Byte: %d, Code: %d, Length: %d\n", i, bc[i].code, bc[i].length);
-        }
-    }
-    printf("##########################################\n");
+    // printf("##########################################\n");
+    // for (int i = 0; i < MAX_BYTES; i++)
+    // {
+    //     if (bc[i].code != -1)
+    //     {
+    //         printf("Byte: %d, Code: %d, Length: %d\n", i, bc[i].code, bc[i].length);
+    //     }
+    // }
+    // printf("##########################################\n");
 
     SerializeTree(root, fo);
     long paddingPosition = ftell(fo);
@@ -49,14 +49,14 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
         int i = 0;
         int leftOver = 0;
 
-        char msg;
+        unsigned char msg;
         int endOfFile;
         endOfFile = fread(&msg, sizeof(char), 1, fi) != 1;
         int leftShiftLength;
 
         while (!endOfFile)
         {
-            char finalByte = 0;
+            unsigned char finalByte = 0;
             int chunkSize = 8;
 
             while (!endOfFile)
@@ -122,7 +122,8 @@ void DecompressFile(FILE *fi, FILE *fo)
             // printf("%d\n",   i);
             if (node->left == NULL && node->right == NULL)
             {
-                printf("%c", node->value);
+                // printf("%c", node->value);
+                fwrite(&node->value, sizeof(char), 1, fo);
                 node = root;
                 // printf("vem\n");
 
@@ -144,7 +145,8 @@ void DecompressFile(FILE *fi, FILE *fo)
 
         if (node->left == NULL && node->right == NULL)
         {
-            printf("%c", node->value);
+            // printf("%c", node->value);
+            fwrite(&node->value, sizeof(char), 1, fo);
             node = root;
             // printf("vem\n");
 
@@ -157,7 +159,8 @@ void DecompressFile(FILE *fi, FILE *fo)
     {
         if (node->left == NULL && node->right == NULL)
         {
-            printf("%c", node->value);
+            // printf("%c", node->value);
+            fwrite(&node->value, sizeof(char), 1, fo);
             node = root;
 
             if (i == 8 - paddingLength)

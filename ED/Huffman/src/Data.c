@@ -7,12 +7,12 @@ void ReadData(Data *data, char *fileName)
         data->byteFrequency[i] = 0;
     }
 
-    FILE *fp = fopen(fileName, "r");
-    char c;
+    FILE *fp = fopen(fileName, "rb");
+    unsigned char c;
 
     data->nBytes = 0;
 
-    while (fread(&c, sizeof(c), 1, fp) == 1)
+    while (fread(&c, sizeof(char), 1, fp) == 1)
     {
         if (data->byteFrequency[c]++ == 0)
         {
@@ -53,6 +53,6 @@ void PrintByteTable(Data *data)
 {
     for (int i = 0; i < data->nBytes; i++)
     {
-        printf("Byte: %d, Frequência: %d\n", data->byteTable[i]->byte, data->byteTable[i]->frequency);
+        printf("Byte: %d, Frequência: %d\n",(unsigned char) data->byteTable[i]->byte, data->byteTable[i]->frequency);
     }
 }

@@ -3,7 +3,7 @@
 
 typedef struct ByteInfo
 {
-    char byte;
+    unsigned char byte;
     int frequency;
 } ByteInfo;
 
