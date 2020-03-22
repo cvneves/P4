@@ -99,9 +99,7 @@ void DecompressFile(FILE *fi, FILE *fo)
     Node *node = root;
 
     int bitStream[] = {1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1};
-    // int i = 0;
 
-    // while (i < 24)
     while (fread(&chunk, sizeof(char), 1, fi) == 1)
     {
 
