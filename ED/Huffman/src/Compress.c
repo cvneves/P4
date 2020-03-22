@@ -96,33 +96,52 @@ void DecompressFile(FILE *fi, FILE *fo)
 
     unsigned char chunk;
 
-    Node *node;
-
-    // while (fread(&chunk, sizeof(char), 1, fi) == 1)
+    Node *node = root;
 
     int bitStream[] = {1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1};
-    int i = 0;
+    // int i = 0;
 
-    while (i < 24)
+    // while (i < 24)
+    while (fread(&chunk, sizeof(char), 1, fi) == 1)
     {
-        node = root;
 
-        while (1)
+        int i = 0;
+        // printf("\n\n%d\n\n", chunk);
+
+        while (i < 8)
         {
+            // printf("%d\n",   i);
             if (node->left == NULL && node->right == NULL)
             {
                 printf("%c\n", node->value);
-                break;
+                node = root;
+                // printf("vem\n");
+
+                continue;
             }
-            if (bitStream[i] == 1)
+            if (chunk >= 128)
             {
                 node = node->right;
+                 chunk = chunk << 1;
+            i++;
             }
             else
             {
                 node = node->left;
-            }
+                 chunk = chunk << 1;
             i++;
+            }
+
+           
+        }
+
+        if (node->left == NULL && node->right == NULL)
+        {
+            printf("%c\n", node->value);
+            node = root;
+            // printf("vem\n");
+
+            // continue;
         }
     }
 
