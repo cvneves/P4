@@ -112,7 +112,6 @@ void DecompressFile(FILE *fi, FILE *fo)
             if (node->left == NULL && node->right == NULL)
             {
                 printf("%c\n", node->value);
-                // i++;
                 break;
             }
             if (bitStream[i] == 1)
