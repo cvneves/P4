@@ -40,6 +40,7 @@ int main(int argc, char **argv)
     else if (strcmp(mode, "-x") == 0)
     {
         FILE *fi = fopen(argv[2], "rb");
+        
         FILE *fo = fopen(argv[3], "wb");
 
         DecompressFile(fi,fo);

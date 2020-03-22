@@ -38,7 +38,7 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
     }
     printf("##########################################\n");
 
-    // SerializeTree(root, fo);
+    SerializeTree(root, fo);
 
     /* Compressing loop */
 
@@ -83,8 +83,8 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
                 i++;
             }
 
-            printf("%hhx\n", finalByte);
-            fwrite(&msg, sizeof(char), 1, fo);
+            // printf("%hhx\n", finalByte);
+            fwrite(&finalByte, sizeof(char), 1, fo);
         }
     }
 }
@@ -94,12 +94,38 @@ void DecompressFile(FILE *fi, FILE *fo)
     Node *root;
     DeSerializeTree(&root, fi);
 
-    FreeHuffmanTree(root);
+    unsigned char chunk;
 
-    char c;
+    Node *node;
 
-    while(fread(&c, sizeof(char), 1, fi) == 1)
+    // while (fread(&chunk, sizeof(char), 1, fi) == 1)
+
+    int bitStream[] = {1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1};
+    int i = 0;
+
+    while (i < 24)
     {
-        printf("%hhx\n", c);
+        node = root;
+
+        while (1)
+        {
+            if (node->left == NULL && node->right == NULL)
+            {
+                printf("%c\n", node->value);
+                // i++;
+                break;
+            }
+            if (bitStream[i] == 1)
+            {
+                node = node->right;
+            }
+            else
+            {
+                node = node->left;
+            }
+            i++;
+        }
     }
+
+    FreeHuffmanTree(root);
 }

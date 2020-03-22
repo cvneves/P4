@@ -78,9 +78,11 @@ void FreeHuffmanTree(Node *node)
     if (node == NULL)
         return;
 
+
+    // printf("%c\n", node->value);
+
     FreeHuffmanTree(node->left);
 
-    // printf("%d\n", node->value);
 
     FreeHuffmanTree(node->right);
 
