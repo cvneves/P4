@@ -39,6 +39,9 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
     printf("##########################################\n");
 
     SerializeTree(root, fo);
+    long paddingPosition = ftell(fo);
+    char c = 'z';
+    fwrite(&c, sizeof(char), 1, fo);
 
     /* Compressing loop */
 
@@ -49,6 +52,7 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
         char msg;
         int endOfFile;
         endOfFile = fread(&msg, sizeof(char), 1, fi) != 1;
+        int leftShiftLength;
 
         while (!endOfFile)
         {
@@ -60,7 +64,7 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
                 int codeLength = bc[msg].length;
                 int code = bc[msg].code;
 
-                int leftShiftLength = chunkSize - codeLength + leftOver;
+                leftShiftLength = chunkSize - codeLength + leftOver;
 
                 if (leftShiftLength < 0)
                 {
@@ -86,6 +90,10 @@ void CompressFile(FILE *fi, FILE *fo, Node *root)
             // printf("%hhx\n", finalByte);
             fwrite(&finalByte, sizeof(char), 1, fo);
         }
+
+        fseek(fo, paddingPosition, SEEK_SET);
+        c = leftShiftLength;
+        fwrite(&c, sizeof(char), 1, fo);
     }
 }
 
@@ -94,15 +102,18 @@ void DecompressFile(FILE *fi, FILE *fo)
     Node *root;
     DeSerializeTree(&root, fi);
 
-    unsigned char chunk;
+    unsigned char chunk, chunkNext;
+
+    unsigned char paddingLength;
+    fread(&paddingLength, sizeof(char), 1, fi);
+    // printf("%d\n", paddingLength);
 
     Node *node = root;
 
-    int bitStream[] = {1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1};
+    fread(&chunk, sizeof(char), 1, fi);
 
-    while (fread(&chunk, sizeof(char), 1, fi) == 1)
+    while (fread(&chunkNext, sizeof(char), 1, fi) == 1)
     {
-
         int i = 0;
         // printf("\n\n%d\n\n", chunk);
 
@@ -111,7 +122,7 @@ void DecompressFile(FILE *fi, FILE *fo)
             // printf("%d\n",   i);
             if (node->left == NULL && node->right == NULL)
             {
-                printf("%c\n", node->value);
+                printf("%c", node->value);
                 node = root;
                 // printf("vem\n");
 
@@ -120,27 +131,52 @@ void DecompressFile(FILE *fi, FILE *fo)
             if (chunk >= 128)
             {
                 node = node->right;
-                 chunk = chunk << 1;
-            i++;
+                chunk = chunk << 1;
+                i++;
             }
             else
             {
                 node = node->left;
-                 chunk = chunk << 1;
-            i++;
+                chunk = chunk << 1;
+                i++;
             }
-
-           
         }
 
         if (node->left == NULL && node->right == NULL)
         {
-            printf("%c\n", node->value);
+            printf("%c", node->value);
             node = root;
             // printf("vem\n");
 
             // continue;
         }
+        chunk = chunkNext;
+    }
+
+    for (int i = 0;;)
+    {
+        if (node->left == NULL && node->right == NULL)
+        {
+            printf("%c", node->value);
+            node = root;
+
+            if (i == 8 - paddingLength)
+                break;
+
+            continue;
+        }
+        if (chunk >= 128)
+        {
+            // printf("A");
+            node = node->right;
+            chunk = chunk << 1;
+        }
+        else
+        {
+            node = node->left;
+            chunk = chunk << 1;
+        }
+        i++;
     }
 
     FreeHuffmanTree(root);
