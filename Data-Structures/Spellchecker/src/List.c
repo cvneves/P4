@@ -7,7 +7,7 @@ List * ListInitialize()
 	return list;
 }
 
-void * ListInsert(List *list, void *x)
+void * ListAppend(List *list, void *x)
 {
 	Node *temp = malloc(sizeof(Node));
 	temp->data = x;
@@ -23,6 +23,35 @@ void * ListInsert(List *list, void *x)
 		temp->prev = list->tail;
 		temp->next = NULL;
 		list->tail = temp;
+	}
+}
+
+void * ListRemove(List * list, Node *node)
+{
+	if(node == list->tail)
+	{
+		Node *temp = list->tail->prev;
+		free(list->tail);
+		free(list->tail->data);
+		temp->next = NULL;
+		list->tail = temp;
+	}
+	else if(node == list->head)
+	{
+		Node *temp = list->head->next;
+		free(list->head);
+		free(list->head->data);
+		temp->prev = NULL;
+		list->head = temp;
+	}
+	else
+	{
+		Node *prev = node->prev;
+		Node *next = node->next;
+		prev->next = next;
+		next->prev = prev;
+		free(node->data);
+		free(node);
 	}
 }
 

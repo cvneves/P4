@@ -18,6 +18,7 @@ typedef struct List
 
 List * ListInitialize();
 void * ListDestroy(List * list);
-void * ListInsert(List * list, void * x);
+void * ListRemove(List *list, Node *node);
+void * ListAppend(List * list, void * x);
 
 #endif
