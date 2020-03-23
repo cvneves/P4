@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv)
 {
-	Map *hashMap = MapInitialize();
+/*	Map *hashMap = MapInitialize();
 
 	FILE *fp = fopen(argv[1], "r");
 	char buffer[100];
@@ -49,5 +49,29 @@ int main(int argc, char **argv)
 	// 	}
 	// }
 
-	DestroyMap(hashMap);
+	DestroyMap(hashMap); */
+
+	char *str;
+	
+	
+	char buffer[10];
+	char token[] = ".!?/1234567890 \n";
+		
+	FILE *fp = fopen(argv[1], "r");
+
+
+	while(!feof(fp))
+	{
+		fgets(buffer, 10, fp);
+		buffer[strlen(buffer)-1] = 0;
+	        str = strtok(buffer, token);
+		while(str != NULL)
+		{
+			printf("%s\n", str);
+			str = strtok(NULL, token);
+		
+		}
+	}
+
+	fclose(fp);
 }
