@@ -10,11 +10,13 @@
 typedef struct Map
 {
 	size_t numBuckets;
-	List** bucket;
+	List **bucket;
 } Map;
 
-Map * MapInitialize();
-void * MapInsert(Map *map, unsigned long (*HashFunction)(void * T));
-void * DestroyMap(Map*map);
+Map *MapInitialize();
+void *MapInsert(Map *map, void *T, unsigned long (*HashFunction)(void *A));
+void *DestroyMap(Map *map);
+
+unsigned long HashDjb2(void *T);
 
 #endif

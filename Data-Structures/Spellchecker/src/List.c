@@ -4,6 +4,7 @@ List * ListInitialize()
 {
 	List *list = malloc(sizeof(List));
 	list->tail = list->head = NULL;
+	list->size = 0;
 	return list;
 }
 
@@ -24,6 +25,7 @@ void * ListAppend(List *list, void *x)
 		temp->next = NULL;
 		list->tail = temp;
 	}
+	list->size++;
 }
 
 void * ListRemove(List * list, Node *node)
@@ -53,6 +55,7 @@ void * ListRemove(List * list, Node *node)
 		free(node->data);
 		free(node);
 	}
+	list->size--;
 }
 
 void * ListDestroy(List *list)
