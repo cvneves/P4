@@ -20,19 +20,34 @@ int main(int argc, char **argv)
 		MapInsert(hashMap, (void *)str, HashDjb2);
 	}
 
-	for (int i = 0; i < MAX_BUCKETS; i++)
+	fclose(fp);
+
+	fp = fopen(argv[2], "r");
+
+	while (fscanf(fp, "%s", buffer) != EOF)
 	{
-		Node *node = hashMap->bucket[i]->head;
-		printf("#################################\n");
-		while (node != NULL)
-		{
-			printf("%s\n", (char *)node->data);
-			node = node->next;
-		}
-		printf("#################################\n");
-		// printf("%ld\n", hashMap->bucket[i]->size);
+
+		if (MapSearch(hashMap, (void *)buffer, HashDjb2, CompareString))
+			printf("%s\n", buffer);
 	}
 
 	fclose(fp);
+
+	// for (int i = 0; i < MAX_BUCKETS; i++)
+	// {
+	// 	if (hashMap->bucket[i]->size)
+	// 	{
+	// 		Node *node = hashMap->bucket[i]->head;
+	// 		printf("#################################\n");
+	// 		while (node != NULL)
+	// 		{
+	// 			printf("%s\n", (char *)node->data);
+	// 			node = node->next;
+	// 		}
+	// 		printf("#################################\n");
+	// 		// printf("%ld\n", hashMap->bucket[i]->size);
+	// 	}
+	// }
+
 	DestroyMap(hashMap);
 }

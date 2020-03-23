@@ -22,11 +22,38 @@ void *DestroyMap(Map *map)
 	free(map);
 }
 
-void *MapInsert(Map *map, void *T, unsigned long (*HashFunction)(void *A))
+void MapInsert(Map *map, void *T, unsigned long (*HashFunction)(void *A))
 {
 	int hash = HashFunction((void *)T) % MAX_BUCKETS;
 	// printf("%d\n", hash);
 	ListAppend(map->bucket[hash], (void *)T);
+}
+
+int MapSearch(Map *map, void *T, unsigned long (*HashFunction)(void *Element), int CompareFunction(void *a, void *b))
+{
+	int hash = HashFunction((void *)T) % MAX_BUCKETS;
+
+	void *a = T;
+	Node *node = map->bucket[hash]->head;
+	
+	while(node != NULL)
+	{
+		if(CompareFunction(a, node->data))
+		{
+			return 1;
+		}
+		node = node->next;
+	}
+	
+	return 0;
+}
+
+int CompareString(void *a, void *b)
+{
+	char *str1 = (char *)a;
+	char *str2 = (char *)b;
+
+	return !strcmp(str1, str2);
 }
 
 unsigned long HashDjb2(void *T)
