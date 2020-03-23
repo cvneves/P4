@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 
         GetByteFrequency(data);
 
-        // PrintByteTable(data);
+        PrintByteTable(data);
 
         Node *root = BuildHuffmanTree(data);
 
