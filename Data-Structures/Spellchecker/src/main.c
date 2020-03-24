@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv)
 {
-/*	Map *hashMap = MapInitialize();
+	Map *hashMap = MapInitialize();
 
 	FILE *fp = fopen(argv[1], "r");
 	char buffer[100];
@@ -23,13 +23,31 @@ int main(int argc, char **argv)
 	fclose(fp);
 
 	fp = fopen(argv[2], "r");
+	char token[] = "0123456789.?!,;:@#$%&*()[]{}<>";
+
+	int numWords = 0;
+	int failedWords = 0;
 
 	while (fscanf(fp, "%s", buffer) != EOF)
 	{
+		char *str = strtok(buffer, token);
 
-		if (MapSearch(hashMap, (void *)buffer, HashDjb2, CompareString))
-			printf("%s\n", buffer);
+		while (str != NULL)
+		{
+
+			if (!MapSearch(hashMap, (void *)str, HashDjb2, CompareString))
+			{
+				failedWords++;
+				// printf("%s\n", str);
+			}
+			numWords++;
+			str = strtok(NULL, token);
+		}
 	}
+
+	printf("Número total de palavras no texto: %d\n", numWords);
+	printf("Tempo total da verificação: %f\n");
+	printf("Número de palavras que falharam no spell check: %d\n", failedWords);
 
 	fclose(fp);
 
@@ -49,29 +67,5 @@ int main(int argc, char **argv)
 	// 	}
 	// }
 
-	DestroyMap(hashMap); */
-
-	char *str;
-	
-	
-	char buffer[10];
-	char token[] = ".!?/1234567890 \n";
-		
-	FILE *fp = fopen(argv[1], "r");
-
-
-	while(!feof(fp))
-	{
-		fgets(buffer, 10, fp);
-		buffer[strlen(buffer)-1] = 0;
-	        str = strtok(buffer, token);
-		while(str != NULL)
-		{
-			printf("%s\n", str);
-			str = strtok(NULL, token);
-		
-		}
-	}
-
-	fclose(fp);
+	DestroyMap(hashMap);
 }
