@@ -51,8 +51,23 @@ void GetByteFrequency(Data *data)
 
 void PrintByteTable(Data *data)
 {
+    double average = 0.0;
+    double sumFreq = 0;
+    double p[data->nBytes];
+    double entropy = 0;
+
     for (int i = 0; i < data->nBytes; i++)
     {
-        printf("Byte: %d, Frequência: %d\n",(unsigned char) data->byteTable[i]->byte, data->byteTable[i]->frequency);
+        sumFreq += data->byteTable[i]->frequency;
+        // printf("Byte: %d, Frequência: %d\n",(unsigned char) data->byteTable[i]->byte, data->byteTable[i]->frequency);
     }
+    for (int i = 0; i < data->nBytes; i++)
+    {
+        p[i] = (double)data->byteTable[i]->frequency / sumFreq;
+        entropy -= p[i] * (log10(p[i]) / log10(data->nBytes));
+
+        // printf("p[%d] = %lf\n", i, p[i]);
+    }
+
+    printf("Entropy: %lf\n", entropy);
 }

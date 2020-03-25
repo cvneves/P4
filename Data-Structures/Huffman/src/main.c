@@ -26,7 +26,9 @@ int main(int argc, char **argv)
         FILE *fi = fopen(argv[2], "rb");
         FILE *fo = fopen(argv[3], "wb");
 
-        CompressFile(fi, fo, root);
+        int compressed_size = 0;
+        int original_size = 0;
+        CompressFile(fi, fo, root, &original_size, &compressed_size);
 
         FreeHuffmanTree(root);
 
