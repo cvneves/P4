@@ -78,31 +78,32 @@ void FreeHuffmanTree(Node *node)
     if (node == NULL)
         return;
 
-
     // printf("%c\n", node->value);
 
     FreeHuffmanTree(node->left);
-
 
     FreeHuffmanTree(node->right);
 
     free(node);
 }
 
-void SerializeTree(Node *root, FILE *fp)
+void SerializeTree(Node *root, FILE *fp, int *tree_size)
 {
     int value;
     if (!root)
     {
         value = -2;
         fwrite(&value, sizeof(int), 1, fp);
+        *tree_size++;
         // fprintf(fp, "%d ", -2);
         return;
     }
 
     fwrite(&(root->value), sizeof(int), 1, fp);
-    SerializeTree(root->left, fp);
-    SerializeTree(root->right, fp);
+    *tree_size++;
+
+    SerializeTree(root->left, fp, tree_size);
+    SerializeTree(root->right, fp, tree_size);
 }
 
 void DeSerializeTree(Node **root, FILE *fp)

@@ -23,7 +23,7 @@ Node *BuildHuffmanTree(Data *data);
 void FreeHuffmanTree(Node *node);
 int NodeInfoCompare(void *a, void *b);
 
-void SerializeTree(Node *root, FILE *fp);
+void SerializeTree(Node *root, FILE *fp, int *tree_size);
 void DeSerializeTree(Node **root, FILE *fp);
 
 

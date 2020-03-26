@@ -16,7 +16,7 @@ void GenerateCodeTable(Node *node, int i, int length, ByteCode *bc)
     // printf("Byte: %d, Code: %d, Length; %d\n", node->value, i, length);
 }
 
-void CompressFile(FILE *fi, FILE *fo, Node *root, int *orignal_size, int *final_size)
+void CompressFile(FILE *fi, FILE *fo, Node *root, Data *data)
 {
 
     ByteCode bc[MAX_BYTES];
@@ -38,7 +38,10 @@ void CompressFile(FILE *fi, FILE *fo, Node *root, int *orignal_size, int *final_
     // }
     // printf("##########################################\n");
 
-    SerializeTree(root, fo);
+    data->final_size = 1;
+    data->tree_size = 0;
+
+    SerializeTree(root, fo, &(data->tree_size));
     long paddingPosition = ftell(fo);
     char c = 'z';
     fwrite(&c, sizeof(char), 1, fo);
@@ -89,6 +92,7 @@ void CompressFile(FILE *fi, FILE *fo, Node *root, int *orignal_size, int *final_
 
             // printf("%hhx\n", finalByte);
             fwrite(&finalByte, sizeof(char), 1, fo);
+            data->final_size++;
         }
 
         fseek(fo, paddingPosition, SEEK_SET);

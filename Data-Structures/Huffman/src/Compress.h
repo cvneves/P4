@@ -17,7 +17,7 @@ typedef struct ByteCode
 } ByteCode;
 
 void GenerateCodeTable(Node *node, int i, int length, ByteCode *bc);
-void CompressFile(FILE *fi, FILE *fo, Node *root, int *orignal_size, int *final_size);
+void CompressFile(FILE *fi, FILE *fo, Node *root, Data *data);
 void DecompressFile(FILE *fi, FILE *fo);
 
 #endif

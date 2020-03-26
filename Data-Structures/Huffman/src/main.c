@@ -19,16 +19,14 @@ int main(int argc, char **argv)
 
         GetByteFrequency(data);
 
-        PrintByteTable(data);
-
         Node *root = BuildHuffmanTree(data);
 
         FILE *fi = fopen(argv[2], "rb");
         FILE *fo = fopen(argv[3], "wb");
 
-        int compressed_size = 0;
-        int original_size = 0;
-        CompressFile(fi, fo, root, &original_size, &compressed_size);
+        CompressFile(fi, fo, root, data);
+
+        PrintByteTable(data);
 
         FreeHuffmanTree(root);
 
@@ -42,10 +40,10 @@ int main(int argc, char **argv)
     else if (strcmp(mode, "-x") == 0)
     {
         FILE *fi = fopen(argv[2], "rb");
-        
+
         FILE *fo = fopen(argv[3], "wb");
 
-        DecompressFile(fi,fo);
+        DecompressFile(fi, fo);
 
         fclose(fi);
         fclose(fo);

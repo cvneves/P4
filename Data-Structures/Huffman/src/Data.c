@@ -11,6 +11,7 @@ void ReadData(Data *data, char *fileName)
     unsigned char c;
 
     data->nBytes = 0;
+    data->orignal_size = 0;
 
     while (fread(&c, sizeof(char), 1, fp) == 1)
     {
@@ -18,6 +19,7 @@ void ReadData(Data *data, char *fileName)
         {
             data->nBytes++;
         }
+        data->orignal_size++;
     }
 
     fclose(fp);
@@ -64,10 +66,13 @@ void PrintByteTable(Data *data)
     for (int i = 0; i < data->nBytes; i++)
     {
         p[i] = (double)data->byteTable[i]->frequency / sumFreq;
-        entropy -= p[i] * (log10(p[i]) / log10(data->nBytes));
+        entropy -= p[i] * (log10(p[i]) / log10(2));
 
         // printf("p[%d] = %lf\n", i, p[i]);
     }
 
     printf("Entropy: %lf\n", entropy);
+    printf("Orignal size: %d\n", data->orignal_size);
+    printf("Compressed size: %d\n", data->final_size);
+    printf("Tree size: %d\n", data->tree_size);
 }
