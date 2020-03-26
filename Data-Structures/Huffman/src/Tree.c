@@ -94,13 +94,13 @@ void SerializeTree(Node *root, FILE *fp, int *tree_size)
     {
         value = -2;
         fwrite(&value, sizeof(int), 1, fp);
-        *tree_size++;
+        (*tree_size)+=sizeof(int);
         // fprintf(fp, "%d ", -2);
         return;
     }
 
     fwrite(&(root->value), sizeof(int), 1, fp);
-    *tree_size++;
+    (*tree_size)+=sizeof(int);
 
     SerializeTree(root->left, fp, tree_size);
     SerializeTree(root->right, fp, tree_size);

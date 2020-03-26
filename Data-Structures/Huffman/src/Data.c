@@ -71,8 +71,11 @@ void PrintByteTable(Data *data)
         // printf("p[%d] = %lf\n", i, p[i]);
     }
 
+    printf("###################################\n");
     printf("Entropy: %lf\n", entropy);
-    printf("Orignal size: %d\n", data->orignal_size);
-    printf("Compressed size: %d\n", data->final_size);
-    printf("Tree size: %d\n", data->tree_size);
+    printf("Orignal size: %d bytes\n", data->orignal_size);
+    printf("Compressed size: %d bytes\n", data->final_size + data->tree_size);
+    printf("Tree size: %d bytes\n", data->tree_size);
+    printf("Tree/File ratio: %lf%%\n", (double)100 * data->tree_size / (data->tree_size + data->final_size));
+    printf("###################################\n");
 }
