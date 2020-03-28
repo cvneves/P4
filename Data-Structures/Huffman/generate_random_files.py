@@ -2,26 +2,34 @@ import math
 import random
 import argparse
 
-# fp = open("instance/random_files/A.bin", "w")
+num_files = 10
+num_file_sizes = 10
+instance_type = "A"
 
-fileBytes = []
+for j in range(0, num_files):
+    for k in range(0, num_file_sizes):
+        file_name = instance_type + str(j)
 
-fp = open("b", "wb")
+        fileBytes = []
 
-sum = 0
+        folder_name = "random_instances/"
 
-fileSize = 1000000
+        fp = open(folder_name + file_name + ".bin", "wb")
 
-for i in range(0,fileSize):
-    # x = int(round(random.normalvariate(128, 128)))
-    x = int(round(random.uniform(0, 256)))
-    if x < 0:
-        x = 0
-    if x > 255:
-        x = 255
-        
-    fileBytes.append(x)
+        sum = 0
 
-fp.write(bytearray(fileBytes))
-# print(fileBytes)
+        fileSize = 100
+
+        for i in range(0,fileSize):
+            # x = int(round(random.normalvariate(128, 128)))
+            x = int(round(random.uniform(0, 256)))
+            if x < 0:
+                x = 0
+            if x > 255:
+                x = 255
+                
+            fileBytes.append(x)
+
+
+    fp.write(bytearray(fileBytes))
     
