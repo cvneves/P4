@@ -28,12 +28,9 @@ for j in range(0, num_types):
         fileSize = int(round(a * k + b))
 
         for i in range(0,fileSize):
-            x = int(round(random.normalvariate(127, 4)))
+            x = int(round(random.normalvariate(127, 64)))
             # x = int(round(random.uniform(0, 256)))
-            if x < 0:
-                x = 0
-            if x > 255:
-                x = 255
+            x = x%256
                 
             fileBytes.append(x)
 
