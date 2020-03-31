@@ -25,4 +25,8 @@ xs, ys, zs = zip(*sorted(zip(entropy, compressed_ratio, theorical_value)))
 
 plt.plot(xs, ys, 'ro', label="Taxa de compressão obtida")
 plt.plot(xs, zs, label="Taxa de compressão esperada")
+plt.xlabel("Entropia (bits / byte)")
+plt.ylabel("Taxa de compressão (%)")
+
+plt.legend()
 plt.show()
