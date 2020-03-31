@@ -45,6 +45,7 @@ void CompressFile(FILE *fi, FILE *fo, Node *root, Data *data)
     long paddingPosition = ftell(fo);
     char c = 'z';
     fwrite(&c, sizeof(char), 1, fo);
+    data->final_size += data->tree_size;
 
     /* Compressing loop */
 
