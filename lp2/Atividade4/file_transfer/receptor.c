@@ -3,14 +3,15 @@
 #include <netinet/in.h>
 #include <string.h>
 
-int main(void)
+int main(int argc, char** argv)
 {
 
 	int server_fd, port, recv_bytes = -1; //file descriptor do socket, porta e bytes recebidos
 	char buffer;					 // buffer que armazenara mensagem recebida
 	struct sockaddr_in server_addr;  //estrutura que armazena informacoes do socket
 
-	port = 9000;
+	// port = 9000;
+	port = atoi(argv[1]);
 
 	server_fd = socket(AF_INET, SOCK_DGRAM, 0); //crio o socket UDP
 
