@@ -30,7 +30,11 @@ void LogManager::WriteLog(string str)
 {
 	log_mutex.lock();
 	file.open(file_name, ios::app);
+	time_t current_time = time(NULL);
+	string tempo(ctime(&current_time));
+	file << tempo;
 	file << str;
+	file << '\n';
 	file.close();
 	log_mutex.unlock();
 }
@@ -48,7 +52,7 @@ void LogManager::ShowLog()
 
 int main()
 {
-/*	LogManager l1("log_1.txt");
+	LogManager l1("log_1.txt");
 	LogManager l2("log_2.txt");
 
 	thread t1(&LogManager::WriteLog, &l1, "aaa");
@@ -66,7 +70,7 @@ int main()
 	cout << "Log 1:\n";
 	l1.ShowLog();
 	cout << "Log 2:\n";
-	l2.ShowLog(); */
+	l2.ShowLog(); 
 }
 
 
