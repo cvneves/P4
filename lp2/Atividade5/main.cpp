@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <time.h>
-
+#include <string.h>
 
 using namespace std;
 
@@ -23,7 +23,18 @@ class LogManager
 
 LogManager::LogManager(string file_name)
 {
-	this->file_name = file_name;
+	time_t current_time = time(NULL);
+	char *str = (ctime(&current_time));
+	str[strlen(str)-1] = 0;
+	for(int i = 0; i < strlen(str); i++)
+	{
+		if(str[i] == ' ')
+			str[i] = '_';
+	}
+	string tempo(str);
+		
+
+	this->file_name = tempo + "_" + file_name;
 }
 
 void LogManager::WriteLog(string str)
@@ -31,8 +42,11 @@ void LogManager::WriteLog(string str)
 	log_mutex.lock();
 	file.open(file_name, ios::app);
 	time_t current_time = time(NULL);
-	string tempo(ctime(&current_time));
+	char *strin = ctime(&current_time);
+	strin[strlen(strin)-1] = 0;
+	string tempo(strin);
 	file << tempo;
+	file << " - ";
 	file << str;
 	file << '\n';
 	file.close();
