@@ -1,3 +1,5 @@
+/* Compilar com: $g++ -o main main.cpp -pthread */
+
 #include <iostream>
 #include <fstream>
 #include <thread>
