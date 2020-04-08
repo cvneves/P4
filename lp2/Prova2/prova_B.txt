@@ -1,0 +1,65 @@
+2-)
+P() e V() são as funções wait e signal, respectivamente. Na solução, dois semáforos
+(vazioCont e cheioCont) são utilizados. No procedimento Produtor(), sempre que um item é produzido, 
+aguarda-se até que o semáforo emptyCount esteja liberado, para que então ele possa ser inserido no
+Buffer.
+
+procedure Produtor()
+{
+	while(true)
+	{
+		item = produzirItem();
+		P(emptyCount);
+		inserirNoBuffer(item);
+		V(fillCount);
+	}
+}
+
+procedure Consumidor()
+{
+	while(true)
+	{
+		P(fillCount);
+		item = removerItemDoBuffer();
+		V(emptyCount);
+		consumirItem(item);
+	}
+}
+
+3-)
+
+Os parâmetros int angulo e double duracao dizem respeito ao ângulo da webcam e a duração
+do vídeo gravado, respectivamente.
+
+class Monitor
+{	
+	mutex video_mutex;
+	int angulo;
+	double duracao;
+
+	public:
+		Monitor();
+		FrameDeVideo* getCurrentFrame();
+		void moveCamera(int angulo);
+		int getDuracaoVideo();
+};
+
+FrameDeVideo* Monitor::getCurrentFrame()
+{
+	return frameAtual;
+}
+
+void Monitor::moveCamera(int angulo)
+{
+	video_mutex.lock()
+	this->angulo += angulo;
+	video_mutex.unlock();
+}
+
+int getDuracaoVideo()
+{
+	return duracao;
+}
+
+
+
