@@ -1,3 +1,13 @@
+1-) A espera ocupada consiste em soluções com procedimentos do tipo await utilizando-se laços infinitos
+(geralmente implementados na forma de while(true)). Embora gere um uso intensivo de CPU
+(devido aos laços infinitos que constantemente checam uma mesma condição), esse tipo de abordagem pode
+ser vantajoso quando se deseja realizar tarefas simples e que requerem que condições de disponibilidade
+de recursos sejam testadas a todo momento.
+
+Uma alternativa ao uso da espera ocupada é, por exemplo, o uso de semáforos providenciados por APIs mais
+robustas, que possibilitam que se bloqueie uma thread ou processo (anulando o seu uso de CPU) até que
+um recurso esteja disponível.
+
 2-)
 Na solução, dois semáforos (vazioCont e cheioCont) são utilizados. No procedimento Produtor(), sempre que um item é produzido, 
 aguarda-se até que o semáforo emptyCount esteja liberado, para que então ele possa ser inserido no
@@ -8,6 +18,11 @@ Analogamente, no caso dos procedimentos do tipo Consumidor(), espera-se até que
 liberado (assumiu um valor maior do que zero) para que então seja possível recuperar algum item do 
 buffer. Quando esse item é recuperado, incrementa-se vazioCont, tornando-o maior do que zero.
 
+Além disso, já que podem haver vários produtores e consumires e as funções de recuperar e inserir itens
+no buffer podem não ser thread-safe, utiliza-se um terceiro semáforo acesso_mutex, que permite que apenas
+um produtor ou consumidor tenha acesso ao buffer por vez. 
+
+sem_t acesso_mutex;
 sem_t vazioCont, cheioCont;
 
 void* threadProdutor(void *id_produtor)
@@ -16,7 +31,9 @@ void* threadProdutor(void *id_produtor)
 	{
 		item = produzirItem();
 		sem_wait(&vazioCont);
+		sem_wait(&acesso_mutex);
 		inserirNoBuffer(item);
+		sem_post(&acesso_mutex);
 		sem_post(&cheioCont);
 	}
 }
@@ -26,7 +43,9 @@ procedure threadConsumidor(void *id_consumidor)
 	while(true)
 	{
 		sem_wait(&cheioCont);
+		sem_wait(&acesso_mutex);
 		item = removerItemDoBuffer();
+		sem_post(&acesso_mutex);
 		sem_post(&vazioCont);
 		consumirItem(item);
 	}
@@ -38,6 +57,10 @@ Assume-se que a classe Monitor já possui atributos ângulo, frame, duração, e
 
 class Monitor
 {	
+
+	/* atributos basicos ...
+	... */
+
 	mutex video_mutex;
 
 	public:
@@ -64,6 +87,22 @@ int getDuracaoVideo()
 	return duracao;
 }
 
-4-)
+4-) Sockets são componentes que permitem a comunicação entre diferentes processos. Esses processos, por
+sua vez, podem estar em máquinas diferentes, o que significa que protocolos que permitem a comunicação
+através de redes são necessários. Tendo isso em vista, existem alguns tipos diferentes de sockets, 
+que convém em situações diferentes.
+
+Os stream sockets, por exemplo, permitem o recebimento de dados pelo processo receptor na ordem em
+que foram enviados. Além disso, os stream sockets garantem a integralidade dos dados enviados. Sendo 
+assim, são convenientes em situações cuja garantia se valem no recebimento da totalidade dos dados, como
+a troca de mensagens de texto (se apenas algumas palavras de um texto deixassem de ser enviadas, ele
+deixaria de fazer sentido).
+
+Os sockets do tipo datagram, por outro lado, são mais rápidos, mas não garantem o envio de toda a 
+informação e nem que a ordem de dados recebidos é igual à dos dados enviados. Por esses motivos, eles
+são convenientes em situação em que a totalidade dos dados não é necessária, como o streaming de vídeos.
+(se alguns frames de um vídeo não forem recebidos por um usuário, ele dificilmente perceberá).
+
+
 
 
