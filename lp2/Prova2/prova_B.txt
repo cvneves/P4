@@ -1,41 +1,44 @@
 2-)
-P() e V() são as funções wait e signal, respectivamente. Na solução, dois semáforos
-(vazioCont e cheioCont) são utilizados. No procedimento Produtor(), sempre que um item é produzido, 
+Na solução, dois semáforos (vazioCont e cheioCont) são utilizados. No procedimento Produtor(), sempre que um item é produzido, 
 aguarda-se até que o semáforo emptyCount esteja liberado, para que então ele possa ser inserido no
-Buffer.
+Buffer. Ao inserir-se um item no buffer, incrementa-se cheioCont, tornando possível que algum
+item seja consumido.
 
-procedure Produtor()
+Analogamente, no caso dos procedimentos do tipo Consumidor(), espera-se até que cheioCont esteja
+liberado (assumiu um valor maior do que zero) para que então seja possível recuperar algum item do 
+buffer. Quando esse item é recuperado, incrementa-se vazioCont, tornando-o maior do que zero.
+
+sem_t vazioCont, cheioCont;
+
+void* threadProdutor(void *id_produtor)
 {
 	while(true)
 	{
 		item = produzirItem();
-		P(emptyCount);
+		sem_wait(&vazioCont);
 		inserirNoBuffer(item);
-		V(fillCount);
+		sem_post(&cheioCont);
 	}
 }
 
-procedure Consumidor()
+procedure threadConsumidor(void *id_consumidor)
 {
 	while(true)
 	{
-		P(fillCount);
+		sem_wait(&cheioCont);
 		item = removerItemDoBuffer();
-		V(emptyCount);
+		sem_post(&vazioCont);
 		consumirItem(item);
 	}
 }
 
 3-)
 
-Os parâmetros int angulo e double duracao dizem respeito ao ângulo da webcam e a duração
-do vídeo gravado, respectivamente.
+Assume-se que a classe Monitor já possui atributos ângulo, frame, duração, etc.
 
 class Monitor
 {	
 	mutex video_mutex;
-	int angulo;
-	double duracao;
 
 	public:
 		Monitor();
@@ -61,5 +64,6 @@ int getDuracaoVideo()
 	return duracao;
 }
 
+4-)
 
 
