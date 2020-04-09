@@ -53,7 +53,8 @@ procedure threadConsumidor(void *id_consumidor)
 
 3-)
 
-Assume-se que a classe Monitor já possui atributos ângulo, frame, duração, etc.
+Assume-se que a classe Monitor já possui atributos básicos ângulo, frame, duração, etc. 
+
 
 class Monitor
 {	
@@ -103,6 +104,22 @@ informação e nem que a ordem de dados recebidos é igual à dos dados enviados
 são convenientes em situação em que a totalidade dos dados não é necessária, como o streaming de vídeos.
 (se alguns frames de um vídeo não forem recebidos por um usuário, ele dificilmente perceberá).
 
+Para implementar o servidor baseado em sockets UDP, o seguinte código foi utilizado:
 
+int main()
+{
+	int server_fd = socket(AF_INET,SOCKDGRAM,0);
+	int porta = 9000;
+	int n_dados_recebidos;
+
+	char buf[100];
+	struct sockaddr_in server_addr;
+	
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_port = htons(port);
+	
+	
+
+}
 
 
