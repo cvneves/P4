@@ -23,14 +23,13 @@ void *responde_cliente(void *param)
 
 /* Um servidor de eco. Tudo que este servidor receber de um cliente, ele enviara de volta */
 
-int main(int argc, char **argv)
+int main(void)
 {
 	char msg[100];
 
-	int server_port = atoi(argv[1]);
-	char *nome_bate_papo = argv[2];
+	int server_port = 22000;
+	scanf("%d", &server_port);
 
-	printf("Iniciando %s na porta %d...\n", nome_bate_papo, server_port);
 
 	int listen_fd, client_fd; // dois file descriptors, 1 para ouvir solicitacoes, outro para o cliente
 
@@ -40,6 +39,8 @@ int main(int argc, char **argv)
 	pthread_t threads[10]; // array que armazenara 10 threads (MAXIMO DE CLIENTES)
 
 	int thread_count = 0; // contador de threads (de clientes)
+
+	printf("Loading...\n");
 
 	listen_fd = socket(AF_INET, SOCK_STREAM, 0); // listen_fd representa o socket que aguardara requisicoes
 
@@ -60,7 +61,6 @@ int main(int argc, char **argv)
 	{
 		client_fd = accept(listen_fd, (struct sockaddr *)NULL, NULL); // funcao bloqueante, gera novo socket
 		pthread_create(&threads[thread_count++], NULL, (void *)responde_cliente, (void *)client_fd);
-		printf("Se conectou\n");
 	}
 
 	return 0;
