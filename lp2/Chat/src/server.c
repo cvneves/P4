@@ -18,17 +18,19 @@ void *responde_cliente(void *param)
 {
 	ClientInfo *client_info = (ClientInfo *)param;
 
-	char msg[100];
+	char user_name[100];
 
-	read(client_info->client_fd, msg, 100);
-	printf("%s se conectou com o IP %s\n", msg, inet_ntoa(client_info->client_addr.sin_addr));
+	read(client_info->client_fd, user_name, 100);
+	printf("%s se conectou com o IP %s\n", user_name, inet_ntoa(client_info->client_addr.sin_addr));
+
+	char msg[100];
 
 	while (1)
 	{
-		bzero(msg, 100);									 // inicializa a mensagem com 0
-		read(client_info->client_fd, msg, 100);				 // le mensagem do socket cliente associado
-		printf("Recebi do cliente: %s\n", msg);				 // exibe o que recebeu do cliente
-		write(client_info->client_fd, msg, strlen(msg) + 1); // envia de volta a mesma mensgem
+		bzero(msg, 100);									  // inicializa a mensagem com 0
+		read(client_info->client_fd, msg, 100);				  // le mensagem do socket cliente associado
+		printf("%s enviou uma mensagem: %s", user_name, msg); // exibe o que recebeu do cliente
+		write(client_info->client_fd, msg, strlen(msg) + 1);  // envia de volta a mesma mensgem
 	}
 }
 
