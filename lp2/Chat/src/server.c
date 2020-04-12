@@ -9,6 +9,8 @@
 #include "SocketInfo.h"
 #include "List.h"
 
+List *client_list;
+
 void *responde_cliente(void *param)
 {
 
@@ -20,12 +22,24 @@ void *responde_cliente(void *param)
 	{
 		bzero(msg, 100);
 		read(client_fd, msg, 100);
+
+		Node *node = client_list->head;
+
 		printf("Recebi do cliente: %s", msg);
-		write(client_fd, msg, strlen(msg) + 1);
+
+		while (node != NULL)
+		{
+			int c_fd = *((int *)node->data);
+			if (c_fd == client_fd)
+			{
+				node = node->next;
+				continue;
+			}
+			write(c_fd, msg, strlen(msg) + 1);
+			node = node->next;
+		}
 	}
 }
-
-List *client_list;
 
 int main(int argc, char **argv)
 {
@@ -36,7 +50,7 @@ int main(int argc, char **argv)
 	int server_port = atoi(argv[1]);
 	char *servername = argv[2];
 
-	int listen_fd, client_fd;
+	int listen_fd;
 
 	struct sockaddr_in server_addr;
 	struct sockaddr_in client_addr;
@@ -64,8 +78,9 @@ int main(int argc, char **argv)
 
 	while (1)
 	{
-		client_fd = accept(listen_fd, (struct sockaddr *)NULL, NULL);
-		pthread_create(&threads[thread_count++], NULL, (void *)responde_cliente, (void *)&client_fd);
+		int *client_fd = malloc(sizeof(int));
+		*client_fd = accept(listen_fd, (struct sockaddr *)NULL, NULL);
+		pthread_create(&threads[thread_count++], NULL, (void *)responde_cliente, (void *)client_fd);
 		ListAppend(client_list, client_fd);
 	}
 

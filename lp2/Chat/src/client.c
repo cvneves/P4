@@ -7,6 +7,26 @@
 
 #include "SocketInfo.h"
 
+pthread_mutex_t lock;
+
+void *receive_message(void *param)
+{
+	int client_fd = *((int *)param);
+
+	char recv_msg[100];
+
+	while (1)
+	{
+		// pthread_mutex_lock(&lock);
+
+		bzero(recv_msg, 100);
+		read(client_fd, recv_msg, 100);
+		printf("Recebi do servidor: %s\n", recv_msg);
+
+		// pthread_mutex_unlock(&lock);
+	}
+}
+
 int main(int argc, char **argv)
 {
 	char *username = argv[3];
@@ -34,18 +54,22 @@ int main(int argc, char **argv)
 
 	connect(client_fd, (struct sockaddr *)&server_addr, sizeof(server_addr));
 
+	pthread_t client_receive_thread;
+	pthread_create(&client_receive_thread, NULL, (void *)receive_message, (void *)&client_fd);
+	// pthread_join(client_receive_thread, NULL);
+
 	while (1)
 	{
-		bzero(send_msg, 100);
-		// bzero(recv_msg, 100);
+		// pthread_mutex_lock(&lock);
 
-		printf("Digite sua mensagem: ");
+		bzero(send_msg, 100);
+
+		// printf("Digite sua mensagem: ");
 		fgets(send_msg, 100, stdin);
 
 		write(client_fd, send_msg, strlen(send_msg) + 1);
-		// read(client_fd, recv_msg, 100);
 
-		// printf("Recebi do servidor: %s\n", recv_msg);
+		// pthread_mutex_unlock(&lock);
 	}
 
 	return 0;
