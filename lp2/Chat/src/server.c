@@ -30,13 +30,13 @@ void *responde_cliente(void *param)
 		while (node != NULL)
 		{
 			int c_fd = *((int *)node->data);
+			node = node->next;
+
 			if (c_fd == client_fd)
 			{
-				node = node->next;
 				continue;
 			}
 			write(c_fd, msg, strlen(msg) + 1);
-			node = node->next;
 		}
 	}
 }

@@ -21,7 +21,7 @@ void *receive_message(void *param)
 
 		bzero(recv_msg, 100);
 		read(client_fd, recv_msg, 100);
-		printf("Recebi do servidor: %s\n", recv_msg);
+		printf("Recebi do servidor: %s", recv_msg);
 
 		// pthread_mutex_unlock(&lock);
 	}
