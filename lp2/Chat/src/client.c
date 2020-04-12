@@ -1,21 +1,21 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <string.h>
-#include <arpa/inet.h>
-#include <unistd.h>
+#include <stdlib.h>
+
+#include "SocketInfo.h"
 
 int main(int argc, char **argv)
 {
-	char *host = argv[1];
-	int port = atoi(argv[2]);
-	char *user_name = argv[3];
-
-	printf("Apelido: %s\n", user_name);
+	char *username = argv[3];
 
 	int client_fd;
+
+	int port = atoi(argv[2]);
+
+	char *host = argv[1];
 
 	char send_msg[100];
 	char recv_msg[100];
@@ -34,23 +34,18 @@ int main(int argc, char **argv)
 
 	connect(client_fd, (struct sockaddr *)&server_addr, sizeof(server_addr));
 
-	{
-		strcpy(send_msg, user_name);
-		write(client_fd, send_msg, strlen(send_msg) + 1);
-	}
-
 	while (1)
 	{
 		bzero(send_msg, 100);
-		bzero(recv_msg, 100);
+		// bzero(recv_msg, 100);
 
-		printf("Digite algo para enviar ao servidor: ");
-		fgets(send_msg, 100, stdin); //le do usuario string para enviar ao servidor
+		printf("Digite sua mensagem: ");
+		fgets(send_msg, 100, stdin);
 
 		write(client_fd, send_msg, strlen(send_msg) + 1);
-		read(client_fd, recv_msg, 100); // le do servidor string para exibir para o usuario
+		// read(client_fd, recv_msg, 100);
 
-		printf("Recebi do servidor: %s\n", recv_msg); // exibe o recebido na tela
+		// printf("Recebi do servidor: %s\n", recv_msg);
 	}
 
 	return 0;
