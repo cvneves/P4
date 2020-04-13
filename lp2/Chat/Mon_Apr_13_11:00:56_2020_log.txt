@@ -1,0 +1,18 @@
+Mon Apr 13 11:00:58 2020 - OlhaOGas se conectou  com o IP 127.0.0.1
+
+Mon Apr 13 11:01:01 2020 - squidStuckTomorrow se conectou  com o IP 127.0.0.1
+
+Mon Apr 13 11:01:03 2020 - squidStuckTomorrow enviou uma mensagem: TORASSIC FARK
+
+Mon Apr 13 11:01:07 2020 - squidStuckTomorrow enviou uma mensagem: A FABRICA DE DINOSSAUROS EEE
+
+Mon Apr 13 11:01:11 2020 - OlhaOGas enviou uma mensagem: HIHIHIHIHIHIHI EOQ HOMI
+
+Mon Apr 13 11:01:12 2020 - OlhaOGas enviou uma mensagem: OXE
+
+Mon Apr 13 11:01:14 2020 - OlhaOGas enviou uma mensagem: TU E DOIDO E PARCEIRO
+
+Mon Apr 13 11:01:18 2020 - OlhaOGas se desconectou
+
+Mon Apr 13 11:01:20 2020 - squidStuckTomorrow se desconectou
+

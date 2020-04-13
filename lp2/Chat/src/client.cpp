@@ -26,7 +26,10 @@ void receive_message(int client_fd)
 		bzero(recv_msg, 100);
 		read(client_fd, recv_msg, 100);
 
-		cout << string(recv_msg) << flush;
+		// cout << string(recv_msg) << flush;
+		printf("\r%s", recv_msg);
+		printf("\r%s", "> ");
+		fflush(stdout);
 	}
 }
 
@@ -70,7 +73,8 @@ int main(int argc, char **argv)
 	{
 		bzero(send_msg, 100);
 
-		// cout << "Digite sua msg: ";
+		printf("\r%s", "> ");
+		fflush(stdout);
 		fgets(send_msg, 100, stdin);
 
 		write(client_fd, send_msg, strlen(send_msg) + 1);
