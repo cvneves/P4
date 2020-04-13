@@ -12,25 +12,40 @@
 #include <vector>
 
 #define MAX_CLIENTS 100
+#define MAX_STR_SIZE 500
 
 using namespace std;
 
-class Server
+class ClientInfo
 {
-	
+  public:
+	int client_fd;
+	string client_name;
+	ClientInfo(int cfd, string cn)
+	{
+		client_fd = cfd;
+		client_name = cn;
+	}
 };
 
-void answer_client(int client_fd)
+void answer_client(ClientInfo client_info)
 {
 	char msg[100];
 
 	while (1)
 	{
 		bzero(msg, 100);
-		read(client_fd, msg, 100);
+		read(client_info.client_fd, msg, 100);
 		cout << "Recebi do cliente: " << string(msg) << flush;
-		write(client_fd, msg, strlen(msg) + 1);
+		write(client_info.client_fd, msg, strlen(msg) + 1);
+
+		// else
+		// {
+		// 	cout << client_info.client_name << " se desconectou" << endl;
+		// 	break;
+		// }
 	}
+
 }
 
 thread answer_thread[MAX_CLIENTS];
@@ -61,9 +76,14 @@ int main(int argc, char **argv)
 		struct sockaddr_in client_addr;
 		int client_addr_len = sizeof(client_addr);
 		int client_fd = accept(listen_fd, (struct sockaddr *)&client_addr, (socklen_t *)&client_addr_len);
-		cout << inet_ntoa(client_addr.sin_addr) << flush;
+		char username[MAX_STR_SIZE];
+		read(client_fd, username, 100);
 
-		answer_thread[thread_count++] = thread(answer_client, client_fd);
+		cout << string(username) << " se conectou com o IP " << inet_ntoa(client_addr.sin_addr) << endl;
+
+		ClientInfo client_info(client_fd, string(username));
+
+		answer_thread[thread_count++] = thread(answer_client, client_info);
 	}
 
 	return 0;

@@ -12,8 +12,6 @@
 
 using namespace std;
 
-
-
 int main(int argc, char **argv)
 {
 	int port = atoi(argv[2]);
@@ -33,11 +31,18 @@ int main(int argc, char **argv)
 	server_addr.sin_port = htons(port);
 	inet_aton(host, &server_addr.sin_addr);
 
-	cout << "Conectand-se ao servidor " << string(host) << " na porta " << port << endl;
+	cout << "Conectando-se ao servidor " << string(host) << " na porta " << port << endl;
 
-	connect(client_fd, (struct sockaddr*) &server_addr, sizeof(server_addr));
+	if(connect(client_fd, (struct sockaddr *)&server_addr, sizeof(server_addr))== -1)
+	{
+		cout << "Conexão com o servidor falhou\n";
+		return 0;
+	}
 
-	while(1)
+	/* envia o username */
+	write(client_fd, user_name.c_str(), user_name.length() + 1);
+
+	while (1)
 	{
 		bzero(send_msg, 100);
 		bzero(recv_msg, 100);
@@ -46,12 +51,13 @@ int main(int argc, char **argv)
 		fgets(send_msg, 100, stdin);
 
 		write(client_fd, send_msg, strlen(send_msg) + 1);
-		read(client_fd, recv_msg, 100);
+		if(read(client_fd, recv_msg, 100))
+		{
+			cout << "Li \n";
+		}
 
 		cout << "Recebi do server: " << string(recv_msg) << flush;
 	}
-	
-
 
 	return 0;
 }
