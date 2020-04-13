@@ -17,12 +17,6 @@
 
 using namespace std;
 
-void str_overwrite()
-{
-	printf("\r%s", "> ");
-	fflush(stdout);
-}
-
 void receive_message(int client_fd)
 {
 	char recv_msg[100];
@@ -34,22 +28,8 @@ void receive_message(int client_fd)
 
 		// cout << string(recv_msg) << flush;
 		printf("\r%s", recv_msg);
-		str_overwrite();
-	}
-}
-
-void send_message(int client_fd)
-{
-	char send_msg[100];
-
-	while (1)
-	{
-		bzero(send_msg, 100);
-
-		str_overwrite();
-		fgets(send_msg, 100, stdin);
-
-		write(client_fd, send_msg, strlen(send_msg) + 1);
+		printf("\r%s", "> ");
+		fflush(stdout);
 	}
 }
 
@@ -61,6 +41,8 @@ int main(int argc, char **argv)
 
 	/* Construção do cliente */
 	int client_fd = socket(AF_INET, SOCK_STREAM, 0);
+
+	char send_msg[100];
 
 	struct sockaddr_in server_addr;
 	bzero(&server_addr, sizeof(server_addr));
@@ -77,6 +59,8 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
+	thread t(receive_message, client_fd);
+
 	/* envia o username e recebe o nome da sala*/
 
 	write(client_fd, user_name.c_str(), user_name.length() + 1);
@@ -85,23 +69,16 @@ int main(int argc, char **argv)
 
 	cout << "Mensagem do servidor: " << string(server_name) << endl;
 
-	thread t(receive_message, client_fd);
-	thread t2(send_message, client_fd);
+	while (1)
+	{
+		bzero(send_msg, 100);
 
-	t.join();
-	t2.join();
+		printf("\r%s", "> ");
+		fflush(stdout);
+		fgets(send_msg, 100, stdin);
 
-	// char send_msg[100];
-
-	// while (1)
-	// {
-	// 	bzero(send_msg, 100);
-
-	// 	str_overwrite();
-	// 	fgets(send_msg, 100, stdin);
-
-	// 	write(client_fd, send_msg, strlen(send_msg) + 1);
-	// }
+		write(client_fd, send_msg, strlen(send_msg) + 1);
+	}
 
 	return 0;
 }

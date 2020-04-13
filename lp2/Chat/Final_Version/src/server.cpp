@@ -68,7 +68,7 @@ class LogManager
 		file << tempo;
 		file << " - ";
 		file << str;
-		// file << '\n';
+		file << '\n';
 		file.close();
 		log_mutex.unlock();
 	}
@@ -158,8 +158,6 @@ int main(int argc, char **argv)
 	string server_name = string(argv[2]);
 
 	cout << "Iniciando bate-papo " << server_name << " na porta " << server_port << endl;
-
-	log_monitor.WriteLog("Iniciando bate-papo " + string(server_name) + " na porta " + to_string(server_port) + '\n');
 
 	/* Construção do servidor */
 	struct sockaddr_in server_addr;
