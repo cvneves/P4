@@ -13,6 +13,7 @@
 #include <list>
 #include <map>
 #include <mutex>
+#include <algorithm>
 
 #define MAX_CLIENTS 100
 #define MAX_STR_SIZE 500
@@ -23,21 +24,41 @@ class ClientInfo
 {
   public:
 	int client_fd;
-	string client_name;
-	ClientInfo(int cfd, string cn)
+	string client_name, ip_address;
+	mutex answer_mutex;
+	ClientInfo(int cfd, string cn, char *ip_add)
 	{
 		client_fd = cfd;
 		client_name = cn;
+		ip_address = string(ip_add);
 	}
 };
 
-vector<pair<thread, ClientInfo*>> thread_client;
+vector<pair<thread, ClientInfo *>> thread_client;
 thread answer_thread[MAX_CLIENTS];
 // list<pair<thread, ClientInfo>> thread_list;
 
 void answer_client(ClientInfo *client_info)
 {
 	char msg[100];
+
+	{
+		string se_conectou = client_info->client_name + " se conectou ";
+
+		cout << se_conectou << " com o IP " << client_info->ip_address << endl;
+
+		se_conectou += "\n";
+
+		for (auto &t : thread_client)
+		{
+			if (t.second->client_fd == 0 || client_info->client_fd == t.second->client_fd)
+				continue;
+
+			t.second->answer_mutex.lock();
+			write(t.second->client_fd, se_conectou.c_str(), se_conectou.length() + 1);
+			t.second->answer_mutex.unlock();
+		}
+	}
 
 	while (1)
 	{
@@ -53,7 +74,10 @@ void answer_client(ClientInfo *client_info)
 			{
 				if (t.second->client_fd == 0 || client_info->client_fd == t.second->client_fd)
 					continue;
+
+				t.second->answer_mutex.lock();
 				write(t.second->client_fd, msg_plus_name.c_str(), msg_plus_name.length() + 1);
+				t.second->answer_mutex.unlock();
 			}
 
 			// write(client_info.client_fd, msg, strlen(msg) + 1);
@@ -61,8 +85,22 @@ void answer_client(ClientInfo *client_info)
 
 		else
 		{
+			client_info->answer_mutex.lock();
 			client_info->client_fd = 0;
-			cout << client_info->client_name << " se desconectou" << endl;
+			string se_desconectou = client_info->client_name + " se desconectou\n";
+			cout << se_desconectou << flush;
+
+			for (auto &t : thread_client)
+			{
+				if (t.second->client_fd == 0 || client_info->client_fd == t.second->client_fd)
+					continue;
+
+				t.second->answer_mutex.lock();
+				write(t.second->client_fd, se_desconectou.c_str(), se_desconectou.length() + 1);
+				t.second->answer_mutex.unlock();
+			}
+
+			client_info->answer_mutex.unlock();
 			break;
 		}
 	}
@@ -97,11 +135,26 @@ int main(int argc, char **argv)
 		char username[MAX_STR_SIZE];
 		read(client_fd, username, 100);
 
-		cout << string(username) << " se conectou com o IP " << inet_ntoa(client_addr.sin_addr) << endl;
+		// cout << string(username) << " se conectou com o IP " << inet_ntoa(client_addr.sin_addr) << endl;
 
-		ClientInfo *client_info = new ClientInfo(client_fd, string(username));
+		ClientInfo *client_info = new ClientInfo(client_fd, string(username), inet_ntoa(client_addr.sin_addr));
 
 		// answer_thread[thread_count++] = thread(answer_client, client_info);
+
+		bool found_empty_space = false;
+
+		for (auto &t : thread_client)
+		{
+			if (t.second->client_fd == 0)
+			{
+				t.first.join();
+				t = {thread(answer_client, client_info), client_info};
+				found_empty_space = true;
+			}
+		}
+
+		if (found_empty_space)
+			continue;
 		thread_client.push_back({thread(answer_client, client_info), client_info});
 	}
 
