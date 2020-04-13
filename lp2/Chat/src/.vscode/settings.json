@@ -9,6 +9,7 @@
         "iostream": "cpp",
         "ostream": "cpp",
         "thread": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "iosfwd": "cpp"
     }
 }

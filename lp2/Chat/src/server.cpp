@@ -14,6 +14,7 @@
 #include <map>
 #include <mutex>
 #include <algorithm>
+#include <fstream>
 
 #define MAX_CLIENTS 100
 #define MAX_STR_SIZE 500
@@ -34,8 +35,49 @@ class ClientInfo
 	}
 };
 
+class LogManager
+{
+  public:
+	fstream file;
+	string file_name;
+	mutex log_mutex;
+
+	LogManager(string file_name)
+	{
+		time_t current_time = time(NULL);
+		char *str = (ctime(&current_time));
+		str[strlen(str) - 1] = 0;
+		for (int i = 0; i < strlen(str); i++)
+		{
+			if (str[i] == ' ')
+				str[i] = '_';
+		}
+		string tempo(str);
+
+		this->file_name = tempo + "_" + file_name;
+	}
+
+	void WriteLog(string str)
+	{
+		log_mutex.lock();
+		file.open(file_name, ios::app);
+		time_t current_time = time(NULL);
+		char *strin = ctime(&current_time);
+		strin[strlen(strin) - 1] = 0;
+		string tempo(strin);
+		file << tempo;
+		file << " - ";
+		file << str;
+		file << '\n';
+		file.close();
+		log_mutex.unlock();
+	}
+};
+
 vector<pair<thread, ClientInfo *>> thread_client;
-thread answer_thread[MAX_CLIENTS];
+LogManager log_monitor("log.txt");
+
+// thread answer_thread[MAX_CLIENTS];
 // list<pair<thread, ClientInfo>> thread_list;
 
 void answer_client(ClientInfo *client_info)
@@ -46,6 +88,7 @@ void answer_client(ClientInfo *client_info)
 		string se_conectou = client_info->client_name + " se conectou ";
 
 		cout << se_conectou << " com o IP " << client_info->ip_address << endl;
+		log_monitor.WriteLog(se_conectou + " com o IP " + client_info->ip_address + "\n");
 
 		se_conectou += "\n";
 
@@ -67,7 +110,9 @@ void answer_client(ClientInfo *client_info)
 
 		if (read(client_info->client_fd, msg, 100))
 		{
-			cout << "Recebi do cliente: " << string(msg) << flush;
+			cout << client_info->client_name << " enviou uma mensagem: " << string(msg) << flush;
+			log_monitor.WriteLog(client_info->client_name + " enviou uma mensagem: " + string(msg));
+
 			msg_plus_name += string(msg);
 
 			for (auto &t : thread_client)
@@ -89,6 +134,7 @@ void answer_client(ClientInfo *client_info)
 			client_info->client_fd = 0;
 			string se_desconectou = client_info->client_name + " se desconectou\n";
 			cout << se_desconectou << flush;
+			log_monitor.WriteLog(se_desconectou);
 
 			for (auto &t : thread_client)
 			{
