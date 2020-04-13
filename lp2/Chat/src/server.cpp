@@ -199,6 +199,7 @@ int main(int argc, char **argv)
 				t.first.join();
 				t = {thread(answer_client, client_info), client_info};
 				found_empty_space = true;
+				break;
 			}
 		}
 
