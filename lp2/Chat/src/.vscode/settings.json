@@ -3,6 +3,10 @@
         "stdio.h": "c",
         "pthread.h": "c",
         "types.h": "c",
-        "socket.h": "c"
+        "socket.h": "c",
+        "socketinfo.h": "c",
+        "cstring": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp"
     }
 }
