@@ -12,6 +12,11 @@
 
 using namespace std;
 
+void receive_message(int client_fd)
+{
+
+}
+
 int main(int argc, char **argv)
 {
 	int port = atoi(argv[2]);
@@ -33,7 +38,7 @@ int main(int argc, char **argv)
 
 	cout << "Conectando-se ao servidor " << string(host) << " na porta " << port << endl;
 
-	if(connect(client_fd, (struct sockaddr *)&server_addr, sizeof(server_addr))== -1)
+	if (connect(client_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)
 	{
 		cout << "Conexão com o servidor falhou\n";
 		return 0;
@@ -51,10 +56,7 @@ int main(int argc, char **argv)
 		fgets(send_msg, 100, stdin);
 
 		write(client_fd, send_msg, strlen(send_msg) + 1);
-		if(read(client_fd, recv_msg, 100))
-		{
-			cout << "Li \n";
-		}
+		read(client_fd, recv_msg, 100);
 
 		cout << "Recebi do server: " << string(recv_msg) << flush;
 	}

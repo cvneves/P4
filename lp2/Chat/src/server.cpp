@@ -11,6 +11,7 @@
 #include <netinet/in.h>
 #include <vector>
 #include <list>
+#include <map>
 
 #define MAX_CLIENTS 100
 #define MAX_STR_SIZE 500
@@ -29,6 +30,10 @@ class ClientInfo
 	}
 };
 
+vector<pair<thread, ClientInfo>> thread_client;
+thread answer_thread[MAX_CLIENTS];
+// list<pair<thread, ClientInfo>> thread_list;
+
 void answer_client(ClientInfo client_info)
 {
 	char msg[100];
@@ -40,6 +45,7 @@ void answer_client(ClientInfo client_info)
 		if (read(client_info.client_fd, msg, 100))
 		{
 			cout << "Recebi do cliente: " << string(msg) << flush;
+
 			write(client_info.client_fd, msg, strlen(msg) + 1);
 		}
 
@@ -50,8 +56,6 @@ void answer_client(ClientInfo client_info)
 		}
 	}
 }
-
-thread answer_thread[MAX_CLIENTS];
 
 int main(int argc, char **argv)
 {
@@ -86,7 +90,8 @@ int main(int argc, char **argv)
 
 		ClientInfo client_info(client_fd, string(username));
 
-		answer_thread[thread_count++] = thread(answer_client, client_info);
+		// answer_thread[thread_count++] = thread(answer_client, client_info);
+		thread_client.push_back({thread(answer_client, client_info), client_info});
 	}
 
 	return 0;
