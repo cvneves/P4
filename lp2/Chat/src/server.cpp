@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <vector>
+#include <list>
 
 #define MAX_CLIENTS 100
 #define MAX_STR_SIZE 500
@@ -35,17 +36,19 @@ void answer_client(ClientInfo client_info)
 	while (1)
 	{
 		bzero(msg, 100);
-		read(client_info.client_fd, msg, 100);
-		cout << "Recebi do cliente: " << string(msg) << flush;
-		write(client_info.client_fd, msg, strlen(msg) + 1);
 
-		// else
-		// {
-		// 	cout << client_info.client_name << " se desconectou" << endl;
-		// 	break;
-		// }
+		if (read(client_info.client_fd, msg, 100))
+		{
+			cout << "Recebi do cliente: " << string(msg) << flush;
+			write(client_info.client_fd, msg, strlen(msg) + 1);
+		}
+
+		else
+		{
+			cout << client_info.client_name << " se desconectou" << endl;
+			break;
+		}
 	}
-
 }
 
 thread answer_thread[MAX_CLIENTS];
