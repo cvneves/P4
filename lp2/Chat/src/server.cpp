@@ -12,6 +12,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <mutex>
 
 #define MAX_CLIENTS 100
 #define MAX_STR_SIZE 500
@@ -30,28 +31,38 @@ class ClientInfo
 	}
 };
 
-vector<pair<thread, ClientInfo>> thread_client;
+vector<pair<thread, ClientInfo*>> thread_client;
 thread answer_thread[MAX_CLIENTS];
 // list<pair<thread, ClientInfo>> thread_list;
 
-void answer_client(ClientInfo client_info)
+void answer_client(ClientInfo *client_info)
 {
 	char msg[100];
 
 	while (1)
 	{
 		bzero(msg, 100);
+		string msg_plus_name = client_info->client_name + ": ";
 
-		if (read(client_info.client_fd, msg, 100))
+		if (read(client_info->client_fd, msg, 100))
 		{
 			cout << "Recebi do cliente: " << string(msg) << flush;
+			msg_plus_name += string(msg);
 
-			write(client_info.client_fd, msg, strlen(msg) + 1);
+			for (auto &t : thread_client)
+			{
+				if (t.second->client_fd == 0 || client_info->client_fd == t.second->client_fd)
+					continue;
+				write(t.second->client_fd, msg_plus_name.c_str(), msg_plus_name.length() + 1);
+			}
+
+			// write(client_info.client_fd, msg, strlen(msg) + 1);
 		}
 
 		else
 		{
-			cout << client_info.client_name << " se desconectou" << endl;
+			client_info->client_fd = 0;
+			cout << client_info->client_name << " se desconectou" << endl;
 			break;
 		}
 	}
@@ -88,7 +99,7 @@ int main(int argc, char **argv)
 
 		cout << string(username) << " se conectou com o IP " << inet_ntoa(client_addr.sin_addr) << endl;
 
-		ClientInfo client_info(client_fd, string(username));
+		ClientInfo *client_info = new ClientInfo(client_fd, string(username));
 
 		// answer_thread[thread_count++] = thread(answer_client, client_info);
 		thread_client.push_back({thread(answer_client, client_info), client_info});
