@@ -181,6 +181,9 @@ int main(int argc, char **argv)
 		char username[MAX_STR_SIZE];
 		read(client_fd, username, 100);
 
+		string room_name(server_name);
+		write(client_fd, room_name.c_str(), room_name.length() + 1);
+
 		// cout << string(username) << " se conectou com o IP " << inet_ntoa(client_addr.sin_addr) << endl;
 
 		ClientInfo *client_info = new ClientInfo(client_fd, string(username), inet_ntoa(client_addr.sin_addr));

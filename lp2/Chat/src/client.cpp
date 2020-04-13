@@ -58,9 +58,13 @@ int main(int argc, char **argv)
 
 	thread t(receive_message, client_fd);
 
-	/* envia o username */
+	/* envia o username e recebe o nome da sala*/
 
 	write(client_fd, user_name.c_str(), user_name.length() + 1);
+	char server_name[100];
+	read(client_fd, server_name, 100);
+
+	cout << "Mensagem do servidor: " << string(server_name) << endl;
 
 	while (1)
 	{
