@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "pthread.h": "c",
+        "types.h": "c",
+        "socket.h": "c",
+        "socketinfo.h": "c",
+        "cstring": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "thread": "cpp",
+        "list": "cpp",
+        "iosfwd": "cpp"
+    }
+}
