@@ -66,5 +66,7 @@ for element in sparseRhs:
 # b = np.array([0,0,120])
 x = solve(A,b)
 
-print(x)
-print(np.linalg.norm(x))
+print(b)
+
+# print(x)
+# print(np.linalg.norm(x))
