@@ -68,5 +68,5 @@ x = solve(A,b)
 
 #print(b)
 
-# print(x)
-print(np.linalg.norm(x))
+print(x)
+print(np.linalg.norm(x, ord=np.Infinity))
