@@ -50,11 +50,27 @@ n = 13
 A = np.zeros((n,n))
 b = np.zeros(n)
 
-for element in sparseMat:
-    A[element[1] - 1][element[0] - 1] = element[2]
+A[0] = [alpha,1,0,0,0,0,0,0,0,0,0,0,0]
+A[1] = [0,-1,0,0,0,1,0,0,0,0,0,0,0]
+A[2] = [0,0,1,0,0,0,0,0,0,0,0,0,0]
+A[3] = [-alpha,0,0,1,beta,0,0,0,0,0,0,0,0]
+A[4] = [alpha,0,1,0,gamma,0,0,0,0,0,0,0,0]
+A[5] = [0,0,0,-1,0,0,1,beta,0,0,0,0,0]
+A[6] = [0,0,0,0,0,0,0,gamma,1,0,0,0,0]
+A[7] = [0,0,0,0,-beta,-1,0,0,0,1,0,0,0]
+A[8] = [0,0,0,0,gamma,0,0,0,1,0,0,0,0]
+A[9] = [0,0,0,0,0,0,-1,0,0,0,alpha,0,0]
+A[10] = [0,0,0,0,0,0,0,0,0,0,alpha,1,0]
+A[11] = [0,0,0,0,0,0,0,gamma,0,0,0,1,0]
+A[12] = [0,0,0,0,0,0,0,0,0,0,alpha,0,1]
 
-for element in sparseRhs:
-    b[element[0]-1] = element[1]
+b = [0,0,2000,0,-1000,0,-500,0,4000,0,-500,2000,0]
+
+# for element in sparseMat:
+#     A[element[1] - 1][element[0] - 1] = element[2]
+
+# for element in sparseRhs:
+#     b[element[0]-1] = element[1]
 
 
 # A = np.array([
